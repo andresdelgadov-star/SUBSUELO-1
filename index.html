@@ -66,6 +66,15 @@ p { line-height: 1.75; }
   position:absolute; inset:0; opacity:.06; pointer-events:none;
   background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
 }
+/* Video fondo intro */
+.intro-video {
+  position:absolute; inset:0;
+  width:100%; height:100%;
+  object-fit:cover;
+  opacity:.35;
+  pointer-events:none;
+  z-index:0;
+}
 .intro-glow {
   position:absolute; width:600px; height:600px; border-radius:50%;
   background:radial-gradient(circle,rgba(232,93,4,.18) 0%,transparent 70%);
@@ -657,6 +666,10 @@ footer { padding:2.5rem 2rem; text-align:center; border-top:1px solid var(--n3);
 <!-- ═══════════ INTRO ═══════════ -->
 <div id="intro" role="dialog" aria-modal="true" aria-label="Pantalla de entrada a SUBSUELO">
   <div class="intro-noise" aria-hidden="true"></div>
+  <!-- Video de fondo intro -->
+  <video class="intro-video" autoplay muted loop playsinline aria-hidden="true">
+    <source src="https://andresdelgadov-star.github.io/SUBSUELO-1/INTRO.mp4" type="video/mp4">
+  </video>
   <div class="intro-glow" aria-hidden="true"></div>
   <div class="intro-particles" id="intro-particles" aria-hidden="true"></div>
   <div class="intro-content">
@@ -738,31 +751,17 @@ footer { padding:2.5rem 2rem; text-align:center; border-top:1px solid var(--n3);
     <div class="mapa-layout">
 
       <!-- Mapa SVG de Colombia con hotspots -->
-      <div class="mapa-png-wrap" role="img" aria-label="Mapa de Colombia con las tres zonas en riesgo señaladas">
+      <div class="mapa-png-wrap" role="img" aria-label="Mapa de Colombia con las tres zonas en riesgo señaladas" style="position:relative;">
+        <!-- PNG/SVG del mapa real de Colombia -->
+        <img src="https://andresdelgadov-star.github.io/SUBSUELO-1/MAPA.svg" alt="Mapa de Colombia"
+             style="width:100%;height:auto;display:block;"
+             draggable="false" aria-hidden="true">
+        <!-- Hotspots interactivos superpuestos -->
         <svg viewBox="0 0 300 430" xmlns="http://www.w3.org/2000/svg"
-             style="width:100%;height:auto;display:block;" aria-hidden="true">
-          <defs>
-            <filter id="mapShadow">
-              <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="rgba(232,93,4,0.12)"/>
-            </filter>
-          </defs>
-          <g filter="url(#mapShadow)">
-            <path style="fill:#161612;stroke:#2e2c28;stroke-width:.8;"
-              d="M190,18 L200,14 L215,12 L225,16 L235,22 L242,20 L248,26 L252,32 L248,42 L255,48 L258,55 L265,58 L268,65 L262,70 L270,78 L268,88 L260,92 L265,100 L262,110 L252,114 L256,122 L258,132 L252,140 L248,150 L238,156 L242,166 L238,176 L228,182 L230,194 L222,204 L210,210 L208,222 L198,232 L185,238 L182,250 L172,262 L164,268 L158,276 L150,282 L140,278 L132,284 L120,280 L110,272 L104,258 L100,244 L108,232 L102,220 L110,208 L100,196 L106,182 L96,168 L100,154 L92,140 L96,126 L86,112 L90,98 L80,84 L84,70 L76,56 L82,44 L90,36 L98,28 L110,20 L124,14 L138,10 L152,8 L165,10 L178,14 Z"/>
-            <path style="fill:#161612;stroke:#2e2c28;stroke-width:.8;"
-              d="M242,20 L248,14 L260,10 L268,14 L272,22 L268,28 L260,32 L252,32 L248,26 Z"/>
-            <path style="fill:#141410;stroke:#2e2c28;stroke-width:.8;"
-              d="M140,278 L132,284 L120,280 L115,292 L118,308 L112,322 L116,338 L112,352 L116,366 L112,380 L116,395 L114,410 L120,422 L130,428 L140,422 L148,410 L146,396 L152,382 L148,368 L154,354 L150,340 L156,326 L152,312 L158,298 L158,284 L150,282 Z"/>
-            <path style="fill:#141410;stroke:#2e2c28;stroke-width:.8;"
-              d="M76,56 L60,68 L48,84 L38,100 L34,116 L38,132 L42,148 L40,164 L44,178 L48,192 L44,206 L50,218 L56,228 L66,232 L78,228 L88,218 L96,208 L100,196 L106,182 L96,168 L100,154 L92,140 L96,126 L86,112 L90,98 L80,84 Z"/>
-            <path style="fill:none;stroke:#1a2a18;stroke-width:.6;opacity:.45;"
-              d="M159,268 L162,250 L158,232 L162,212 L159,192 L162,172 L158,152 L160,130 L156,108 L158,85 L152,65 L145,48"/>
-          </g>
-          <circle cx="154" cy="200" r="2" fill="none" stroke="#282820" stroke-width=".7"/>
-          <text x="160" y="204" style="fill:#282820;font-size:5.5px;font-family:Inter,sans-serif;">Bogotá</text>
-          <text x="148" y="145" style="fill:#222220;font-size:7px;font-family:Inter,sans-serif;letter-spacing:3px;text-anchor:middle;">COLOMBIA</text>
+             style="position:absolute;inset:0;width:100%;height:100%;overflow:visible;"
+             aria-hidden="true">
 
-          <!-- Zona 1 — Magdalena Medio: 7.07°N 73.85°O → x=159 y=140 -->
+          <!-- Zona 1 — Magdalena Medio -->
           <g class="zona-trigger" id="zt-magdalena" onclick="abrirZona('magdalena')"
              role="button" tabindex="0" aria-label="Explorar Zona 1: Ciénaga de Chucurí, Santander"
              onkeydown="if(event.key==='Enter')abrirZona('magdalena')">
@@ -774,7 +773,7 @@ footer { padding:2.5rem 2rem; text-align:center; border-top:1px solid var(--n3);
             <text class="zona-lbl" x="170" y="145">Medio</text>
           </g>
 
-          <!-- Zona 2 — Catatumbo: 8.66°N 72.73°O → x=182 y=99 -->
+          <!-- Zona 2 — Catatumbo -->
           <g class="zona-trigger" id="zt-catatumbo" onclick="abrirZona('catatumbo')"
              role="button" tabindex="0" aria-label="Explorar Zona 2: Río Catatumbo, Norte de Santander"
              onkeydown="if(event.key==='Enter')abrirZona('catatumbo')">
@@ -786,7 +785,7 @@ footer { padding:2.5rem 2rem; text-align:center; border-top:1px solid var(--n3);
             <text class="zona-lbl" x="167" y="102" style="text-anchor:end;">N. Santander</text>
           </g>
 
-          <!-- Zona 3 — Putumayo: 0.5°N 76.5°O → x=105 y=309 -->
+          <!-- Zona 3 — Putumayo -->
           <g class="zona-trigger" id="zt-putumayo" onclick="abrirZona('putumayo')"
              role="button" tabindex="0" aria-label="Explorar Zona 3: Río Mocoa, Putumayo"
              onkeydown="if(event.key==='Enter')abrirZona('putumayo')">
