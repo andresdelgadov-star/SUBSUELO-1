@@ -1,0 +1,1313 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SUBSUELO — ¿Qué hay bajo nuestros pies?</title>
+<meta name="description" content="Explora tres territorios colombianos donde el fracking podría transformar el paisaje, la biodiversidad y el futuro de sus comunidades.">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+<script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.3.0/model-viewer.min.js"></script>
+<style>
+/* ═══════════════════════════════════════════
+   RESET & DESIGN TOKENS — sistema unificado
+═══════════════════════════════════════════ */
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+:root {
+  /* Colores */
+  --n:  #070707; --n2: #0f0f0f; --n3: #191919;
+  --n4: #252525; --n5: #3a3a3a;
+  --o:  #E85D04; --o2: #FF6B1A; --o3: #c44a00;
+  --b:  #f0ebe0; --b2: #b8aa98; --b3: #7a6a58; --b4: #2a201a;
+  --w:  #ffffff;
+  /* Easing — sistema unificado */
+  --ease-out:    cubic-bezier(.16,1,.3,1);
+  --ease-in-out: cubic-bezier(.76,0,.24,1);
+  /* Timing — sistema unificado */
+  --t-fast: 200ms;
+  --t-mid:  350ms;
+  --t-slow: 500ms;
+  /* Tipografía — sistema unificado */
+  --fs-xs:   .5rem;
+  --fs-sm:   .72rem;
+  --fs-base: .88rem;
+  --fs-md:   1rem;
+  --fs-lg:   1.15rem;
+  /* Espaciado — sistema unificado */
+  --sp-xs:  .5rem;
+  --sp-sm:  1rem;
+  --sp-md:  2rem;
+  --sp-lg:  3rem;
+  --sp-xl:  5rem;
+  --sp-2xl: 7rem;
+  /* Bordes — sistema unificado */
+  --border: 1px solid var(--n3);
+  --border-o: 1px solid rgba(232,93,4,.25);
+  /* Sombras — sistema unificado */
+  --shadow-sm:  0 4px 16px rgba(0,0,0,.3);
+  --shadow-md:  0 8px 32px rgba(0,0,0,.4);
+  --shadow-o:   0 0 12px rgba(232,93,4,.2);
+}
+html { scroll-behavior:smooth; font-size:16px; }
+body {
+  background:var(--n); color:var(--b);
+  font-family:'Inter',sans-serif;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+::selection { background:var(--o); color:#000; }
+img { display:block; max-width:100%; }
+button { font-family:inherit; cursor:pointer; }
+p, li, .dc-sub, .cta-desc, .fauna-desc, .modal-texto, .section-desc {
+  hyphens:none; word-break:normal; overflow-wrap:break-word;
+}
+p { line-height:1.75; }
+
+/* ═══════════════════════════════════════════
+   INTRO
+═══════════════════════════════════════════ */
+#intro {
+  position:fixed; inset:0; z-index:9000;
+  background:#000;
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center; overflow:hidden;
+}
+.intro-noise {
+  position:absolute; inset:0; opacity:.06; pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+}
+.intro-glow {
+  position:absolute; width:600px; height:600px; border-radius:50%;
+  background:radial-gradient(circle,rgba(232,93,4,.18) 0%,transparent 70%);
+  animation:glowPulse 4s ease-in-out infinite;
+}
+@keyframes glowPulse { 0%,100%{transform:scale(1);opacity:.6;} 50%{transform:scale(1.15);opacity:1;} }
+.intro-particles { position:absolute; inset:0; pointer-events:none; }
+.ipt {
+  position:absolute; border-radius:50%; background:var(--o); opacity:0;
+  animation:iFloat var(--d,10s) var(--dl,0s) infinite linear;
+}
+@keyframes iFloat {
+  0%   { transform:translateY(100vh); opacity:0; }
+  5%   { opacity:.8; } 95% { opacity:.2; }
+  100% { transform:translateY(-10vh) translateX(var(--dx,0px)); opacity:0; }
+}
+.intro-content { position:relative; z-index:2; text-align:center; padding:var(--sp-md); }
+.intro-logo {
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(5rem,20vw,13rem);
+  letter-spacing:.12em; line-height:.85; color:var(--w);
+  opacity:0; transform:translateY(24px);
+}
+.intro-logo em { font-style:normal; color:var(--o); }
+.intro-tagline {
+  font-size:var(--fs-sm); letter-spacing:.2em; text-transform:uppercase;
+  color:rgba(240,235,224,.45); margin-top:1.75rem;
+  opacity:0; transform:translateY(12px);
+  max-width:36ch; margin-left:auto; margin-right:auto;
+  text-align:center; display:block;
+}
+.intro-cta {
+  margin-top:var(--sp-md); padding:.85rem 2.75rem;
+  font-size:var(--fs-xs); font-weight:700; letter-spacing:.28em; text-transform:uppercase;
+  background:transparent; border:1px solid var(--o); color:var(--o);
+  opacity:0; transform:translateY(12px);
+  position:relative; overflow:hidden;
+  transition:color var(--t-mid), box-shadow var(--t-mid);
+}
+.intro-cta::after {
+  content:''; position:absolute; inset:0; background:var(--o);
+  transform:scaleX(0); transform-origin:left;
+  transition:transform var(--t-slow) var(--ease-out); z-index:-1;
+}
+.intro-cta:hover::after { transform:scaleX(1); }
+.intro-cta:hover { color:#000; box-shadow:0 0 32px rgba(232,93,4,.3); }
+.intro-cta:focus-visible { outline:2px solid var(--o); outline-offset:4px; }
+.intro-skip {
+  position:absolute; bottom:var(--sp-md); right:var(--sp-md);
+  font-size:var(--fs-xs); letter-spacing:.2em; text-transform:uppercase;
+  color:rgba(240,235,224,.25); background:none; border:none;
+  transition:color var(--t-fast);
+}
+.intro-skip:hover { color:var(--b2); }
+.intro-skip:focus-visible { outline:1px solid var(--b3); outline-offset:4px; }
+.intro-progress { position:absolute; bottom:0; left:0; right:0; height:1px; background:rgba(232,93,4,.15); }
+.intro-progress-bar { height:100%; background:var(--o); width:0%; transition:width .1s linear; box-shadow:0 0 8px var(--o); }
+#intro.leaving { animation:introLeave .9s var(--ease-in-out) forwards; }
+@keyframes introLeave { to { opacity:0; transform:scale(1.04); } }
+
+/* ═══════════════════════════════════════════
+   MAIN
+═══════════════════════════════════════════ */
+#main { display:none; }
+#main.visible { display:block; }
+
+/* NAV */
+nav {
+  position:fixed; top:0; left:0; right:0; z-index:500;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:1.1rem 2.5rem;
+  background:rgba(7,7,7,.88); backdrop-filter:blur(20px) saturate(1.5);
+  border-bottom:1px solid rgba(255,255,255,.05);
+  transition:padding var(--t-slow) var(--ease-out);
+}
+nav.scrolled { padding:.8rem 2.5rem; }
+.nav-logo { font-family:'Bebas Neue',sans-serif; font-size:1.5rem; letter-spacing:.2em; color:var(--b); }
+.nav-logo span { color:var(--o); }
+.nav-tag { font-size:var(--fs-xs); letter-spacing:.28em; text-transform:uppercase; color:var(--b3); }
+
+/* ═══════════════════════════════════════════
+   HERO
+═══════════════════════════════════════════ */
+#s-hero {
+  min-height:100vh; display:grid; place-items:center;
+  padding:9rem var(--sp-md) var(--sp-xl); text-align:center;
+  position:relative; overflow:hidden;
+}
+.hero-bg-grid {
+  position:absolute; inset:0; pointer-events:none;
+  background-image:
+    linear-gradient(rgba(232,93,4,.035) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(232,93,4,.035) 1px,transparent 1px);
+  background-size:60px 60px;
+  mask-image:radial-gradient(ellipse at center,black 30%,transparent 75%);
+}
+.hero-bg-glow {
+  position:absolute; bottom:-20%; left:50%; transform:translateX(-50%);
+  width:800px; height:400px;
+  background:radial-gradient(ellipse,rgba(232,93,4,.07) 0%,transparent 65%);
+  pointer-events:none;
+}
+.hero-inner { position:relative; z-index:1; max-width:780px; margin:0 auto; }
+.hero-title {
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(3.5rem,12vw,9rem);
+  letter-spacing:.07em; line-height:.88; color:var(--b);
+}
+.hero-title em { font-style:normal; color:var(--o); }
+.hero-title .line { overflow:hidden; display:block; }
+.hero-title .line-inner { display:block; }
+.hero-sub {
+  max-width:52ch; margin:var(--sp-md) auto 0;
+  font-size:var(--fs-md); font-weight:300; color:var(--b2); line-height:1.8;
+  text-align:center;
+}
+.hero-sub strong { color:var(--b); font-weight:500; }
+.hero-stats {
+  display:grid; grid-template-columns:repeat(3,1fr);
+  max-width:520px; margin:var(--sp-lg) auto 0;
+  border:var(--border);
+}
+.hstat {
+  padding:1.35rem var(--sp-sm); text-align:center; border-right:var(--border);
+  position:relative; overflow:hidden; cursor:default;
+  transition:background var(--t-mid);
+}
+.hstat::before {
+  content:''; position:absolute; bottom:0; left:0; right:0; height:2px;
+  background:var(--o); transform:scaleX(0);
+  transition:transform var(--t-slow) var(--ease-out);
+}
+.hstat:hover::before { transform:scaleX(1); }
+.hstat:hover { background:rgba(232,93,4,.04); }
+.hstat:last-child { border-right:none; }
+.hstat-n { font-family:'Bebas Neue',sans-serif; font-size:2.4rem; letter-spacing:.03em; color:var(--o); line-height:1; display:block; }
+.hstat-l { font-size:var(--fs-xs); letter-spacing:.18em; text-transform:uppercase; color:var(--b3); margin-top:.35rem; display:block; line-height:1.4; }
+.hero-scroll { margin-top:var(--sp-lg); display:flex; flex-direction:column; align-items:center; gap:.75rem; cursor:pointer; }
+.hero-scroll-label { font-size:var(--fs-xs); letter-spacing:.32em; text-transform:uppercase; color:var(--o); }
+.hero-scroll-line { width:1px; height:48px; background:linear-gradient(to bottom,var(--o),transparent); animation:scrollLine 1.8s ease-in-out infinite; }
+@keyframes scrollLine { 0%,100%{opacity:1;transform:scaleY(1);} 50%{opacity:.25;transform:scaleY(.4);} }
+
+/* ═══════════════════════════════════════════
+   SECTION COMMONS
+═══════════════════════════════════════════ */
+.section-header { text-align:center; margin-bottom:var(--sp-lg); }
+.section-eye {
+  font-size:var(--fs-xs); letter-spacing:.42em; text-transform:uppercase;
+  color:var(--o); margin-bottom:.85rem; display:block;
+  text-align:center; width:100%;
+}
+.section-title {
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(2.2rem,5.5vw,4.5rem);
+  letter-spacing:.06em; line-height:1.05; color:var(--b); margin-bottom:.85rem;
+  text-wrap:balance; text-align:center; width:100%;
+}
+.section-desc {
+  font-size:var(--fs-base); color:var(--b2); max-width:52ch;
+  line-height:1.8; margin:0 auto; text-align:center;
+}
+
+/* ═══════════════════════════════════════════
+   MAPA
+═══════════════════════════════════════════ */
+#s-mapa { padding:var(--sp-2xl) var(--sp-md); }
+.mapa-layout {
+  display:flex; flex-direction:column; align-items:center;
+  gap:var(--sp-lg); max-width:960px; margin:0 auto;
+}
+.mapa-png-wrap {
+  position:relative; width:100%; max-width:260px; flex-shrink:0;
+  filter:drop-shadow(0 8px 32px rgba(232,93,4,.12)) drop-shadow(0 2px 8px rgba(0,0,0,.6));
+  transition:filter var(--t-slow);
+}
+.mapa-png-wrap:hover { filter:drop-shadow(0 12px 40px rgba(232,93,4,.2)) drop-shadow(0 4px 12px rgba(0,0,0,.7)); }
+.zona-trigger { cursor:pointer; }
+.zona-ring {
+  fill:none; stroke:var(--o); stroke-width:1;
+  transform-origin:center; transform-box:fill-box;
+  animation:ring 2.5s ease-out infinite;
+}
+@keyframes ring { 0%{r:10;opacity:.7;} 100%{r:26;opacity:0;} }
+.zona-ring-2 { animation-delay:.8s; }
+.zona-dot { fill:var(--o); stroke:var(--n); stroke-width:1.5; transition:r var(--t-mid),filter var(--t-mid); }
+.zona-trigger:hover .zona-dot { r:10; filter:drop-shadow(0 0 6px rgba(232,93,4,.8)); }
+.zona-trigger.active .zona-dot { fill:var(--o2); filter:drop-shadow(0 0 10px rgba(232,93,4,1)); }
+.zona-num { fill:#fff; font-size:7.5px; font-weight:700; font-family:'Inter',sans-serif; text-anchor:middle; dominant-baseline:middle; pointer-events:none; }
+.zona-lbl { fill:var(--b3); font-size:6.5px; font-family:'Inter',sans-serif; pointer-events:none; letter-spacing:.04em; transition:fill var(--t-fast); }
+.zona-trigger:hover .zona-lbl { fill:var(--b2); }
+.zona-cards { display:flex; flex-direction:column; width:100%; max-width:480px; }
+.zona-card {
+  display:grid; grid-template-columns:52px 1fr 24px;
+  align-items:center; gap:1.25rem; padding:1.35rem 1.5rem;
+  border:var(--border); border-bottom:none;
+  cursor:pointer; position:relative; overflow:hidden;
+  transition:background var(--t-mid), border-color var(--t-mid), transform var(--t-mid), box-shadow var(--t-mid);
+}
+.zona-card:last-child { border-bottom:var(--border); }
+.zona-card:focus-visible { outline:2px solid var(--o); outline-offset:-2px; }
+.zona-card::after {
+  content:''; position:absolute; left:0; top:0; bottom:0; width:0;
+  background:linear-gradient(to right,var(--o),transparent); opacity:.1;
+  transition:width var(--t-slow) var(--ease-out);
+}
+.zona-card::before {
+  content:''; position:absolute; left:0; top:0; bottom:0; width:3px;
+  background:var(--o); transform:scaleY(0); transform-origin:center;
+  transition:transform var(--t-mid) var(--ease-out);
+}
+.zona-card:hover { background:var(--n2); border-color:var(--n4); transform:translateX(2px); }
+.zona-card:hover::before,.zona-card.active::before { transform:scaleY(1); }
+.zona-card:hover::after,.zona-card.active::after { width:100%; }
+.zona-card.active { background:var(--n2); border-color:var(--n4); }
+.zc-num {
+  width:42px; height:42px; border-radius:50%;
+  border:1px solid var(--n5); display:flex; align-items:center; justify-content:center;
+  font-family:'Bebas Neue',sans-serif; font-size:1.15rem; color:var(--b3);
+  transition:all var(--t-mid); flex-shrink:0;
+}
+.zona-card:hover .zc-num,.zona-card.active .zc-num {
+  border-color:var(--o); color:var(--o); background:rgba(232,93,4,.08); box-shadow:var(--shadow-o);
+}
+.zc-info { min-width:0; }
+.zc-nombre { font-size:var(--fs-base); font-weight:600; color:var(--b); margin-bottom:.25rem; line-height:1.3; }
+.zc-region { font-size:var(--fs-xs); letter-spacing:.1em; text-transform:uppercase; color:var(--b3); line-height:1.4; }
+.zc-arrow { font-size:1rem; color:var(--o); opacity:0; transition:opacity var(--t-fast),transform var(--t-fast); }
+.zona-card:hover .zc-arrow,.zona-card.active .zc-arrow { opacity:1; transform:translateX(4px); }
+
+/* ═══════════════════════════════════════════
+   VISOR 360
+═══════════════════════════════════════════ */
+#s-visor { display:none; border-top:var(--border-o); }
+#s-visor.visible { display:block; animation:sectionIn var(--t-slow) var(--ease-out) both; }
+@keyframes sectionIn { from{opacity:0;transform:translateY(16px);} to{opacity:1;transform:none;} }
+.visor-topbar {
+  position:sticky; top:54px; z-index:200;
+  display:flex; align-items:center; gap:var(--sp-sm);
+  padding:var(--sp-sm) var(--sp-md);
+  background:rgba(7,7,7,.96); backdrop-filter:blur(20px);
+  border-bottom:var(--border); flex-wrap:wrap;
+}
+.visor-back {
+  display:flex; align-items:center; gap:.45rem;
+  font-size:var(--fs-xs); letter-spacing:.2em; text-transform:uppercase;
+  color:var(--b3); background:none; border:1px solid transparent; padding:.35rem .75rem;
+  transition:color var(--t-fast),border-color var(--t-fast),background var(--t-fast);
+}
+.visor-back:hover { color:var(--b); border-color:var(--n5); background:var(--n2); }
+.visor-back:focus-visible { outline:2px solid var(--o); outline-offset:2px; }
+.visor-back svg { width:14px; height:14px; transition:transform var(--t-fast); }
+.visor-back:hover svg { transform:translateX(-2px); }
+.visor-divider { width:1px; height:20px; background:var(--n5); flex-shrink:0; }
+.visor-meta { flex:1; min-width:0; }
+.visor-zona-label { font-size:var(--fs-sm); letter-spacing:.15em; text-transform:uppercase; color:var(--o); display:block; font-weight:500; }
+.visor-coords { font-size:var(--fs-xs); letter-spacing:.1em; color:var(--b3); margin-top:.2rem; display:block; font-family:monospace; }
+.visor-badge360 {
+  display:flex; align-items:center; gap:.4rem;
+  font-size:var(--fs-xs); letter-spacing:.18em; text-transform:uppercase;
+  border:var(--border-o); padding:.3rem .7rem; color:var(--o); flex-shrink:0;
+}
+.visor-badge360 svg { width:10px; height:10px; animation:spin360 8s linear infinite; }
+@keyframes spin360 { to { transform:rotate(360deg); } }
+.visor-compass { width:32px; height:32px; flex-shrink:0; display:flex; align-items:center; justify-content:center; }
+.visor-compass svg { width:28px; height:28px; opacity:.45; animation:compassWobble 6s ease-in-out infinite; }
+@keyframes compassWobble { 0%,100%{transform:rotate(0deg);} 25%{transform:rotate(8deg);} 75%{transform:rotate(-8deg);} }
+.escena-wrap { position:relative; width:100%; height:70vh; min-height:480px; background:#020202; overflow:hidden; }
+.escena-inner { width:100%; height:100%; }
+.escena-loader {
+  position:absolute; inset:0; z-index:20; background:var(--n2);
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1.5rem;
+  transition:opacity var(--t-slow) ease, visibility var(--t-slow) ease;
+}
+.escena-loader.hidden { opacity:0; visibility:hidden; }
+.loader-ring { width:44px; height:44px; border:1px solid var(--n4); border-top-color:var(--o); border-radius:50%; animation:spin .8s linear infinite; }
+@keyframes spin { to { transform:rotate(360deg); } }
+.loader-txt { font-size:var(--fs-xs); letter-spacing:.32em; text-transform:uppercase; color:var(--b3); transition:opacity var(--t-mid); }
+.loader-bar { width:100px; height:1px; background:var(--n4); overflow:hidden; }
+.loader-bar-fill { height:100%; background:var(--o); width:0%; animation:loadBar 1s ease forwards; box-shadow:0 0 6px var(--o); }
+@keyframes loadBar { to { width:100%; } }
+.escena-chip {
+  position:absolute; top:1.5rem; left:50%; transform:translateX(-50%);
+  font-size:var(--fs-xs); letter-spacing:.32em; text-transform:uppercase;
+  padding:.3rem var(--sp-sm); border:var(--border-o);
+  color:var(--o); background:rgba(7,7,7,.8);
+  backdrop-filter:blur(8px); pointer-events:none; z-index:10; white-space:nowrap;
+}
+.escena-hint {
+  position:absolute; bottom:1.5rem; left:50%; transform:translateX(-50%);
+  font-size:var(--fs-xs); letter-spacing:.2em; text-transform:uppercase;
+  color:rgba(160,144,128,.35); pointer-events:none; z-index:10; white-space:nowrap; display:none;
+}
+
+/* ═══════════════════════════════════════════
+   FAUNA
+═══════════════════════════════════════════ */
+#s-fauna { display:none; padding:var(--sp-xl) var(--sp-md); border-top:var(--border); text-align:center; }
+#s-fauna.visible { display:block; animation:sectionIn var(--t-slow) .1s var(--ease-out) both; }
+.fauna-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:1.5rem; max-width:760px; margin:var(--sp-lg) auto 0; }
+.fauna-card {
+  background:var(--n2); border:var(--border);
+  padding:var(--sp-md) 1.75rem;
+  display:flex; flex-direction:column; align-items:center; gap:var(--sp-sm);
+  cursor:pointer; text-align:center; position:relative; overflow:hidden;
+  transition:background var(--t-mid), border-color var(--t-mid), transform var(--t-slow) var(--ease-out), box-shadow var(--t-slow);
+}
+.fauna-card::before {
+  content:''; position:absolute; bottom:0; left:0; right:0; height:2px;
+  background:linear-gradient(to right,transparent,var(--o),transparent);
+  transform:scaleX(0); transform-origin:center;
+  transition:transform var(--t-slow) var(--ease-out);
+}
+.fauna-card:hover { background:var(--n3); border-color:rgba(232,93,4,.18); transform:translateY(-4px); box-shadow:var(--shadow-md); }
+.fauna-card:hover::before { transform:scaleX(1); }
+.fauna-card:focus-visible { outline:2px solid var(--o); outline-offset:2px; }
+.fauna-model-wrap { width:100%; height:180px; position:relative; background:var(--n3); border:var(--border); overflow:hidden; }
+.fauna-model-wrap model-viewer { width:100%; height:100%; --poster-color:transparent; }
+.fauna-model-ph { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:.75rem; }
+.fauna-model-scan {
+  position:absolute; top:0; left:-100%; width:60%; height:1px;
+  background:linear-gradient(to right,transparent,var(--o),transparent);
+  animation:scanLine 3s ease-in-out infinite;
+}
+@keyframes scanLine { 0%{top:0%;left:-60%;} 100%{top:100%;left:160%;} }
+.fauna-ph-label { font-size:var(--fs-xs); letter-spacing:.2em; text-transform:uppercase; color:var(--n5); text-align:center; line-height:2.2; }
+.fauna-ph-icon { width:34px; height:34px; border:1px solid var(--n5); border-radius:50%; display:flex; align-items:center; justify-content:center; opacity:.35; }
+.fauna-ph-icon svg { width:14px; height:14px; fill:none; stroke:var(--b3); stroke-width:1.5; }
+.fauna-estado {
+  font-size:var(--fs-xs); letter-spacing:.2em; text-transform:uppercase;
+  color:var(--o); border:var(--border-o); padding:.25rem .65rem; display:inline-block;
+  transition:background var(--t-fast);
+}
+.fauna-card:hover .fauna-estado { background:rgba(232,93,4,.08); }
+.fauna-nombre { font-size:var(--fs-md); font-weight:600; color:var(--b); line-height:1.25; }
+.fauna-nombre-sci { font-size:var(--fs-sm); color:var(--b3); font-style:italic; margin-top:.15rem; }
+.fauna-desc { font-size:var(--fs-sm); color:var(--b2); line-height:1.7; max-width:32ch; margin:0 auto; }
+.fauna-btn {
+  font-size:var(--fs-xs); letter-spacing:.2em; text-transform:uppercase;
+  color:var(--b3); border:var(--border); padding:.45rem 1.1rem;
+  background:none; transition:border-color var(--t-fast),color var(--t-fast),background var(--t-fast),transform var(--t-fast);
+}
+.fauna-btn:hover { border-color:var(--o); color:var(--o); background:rgba(232,93,4,.06); transform:translateY(-1px); }
+.fauna-btn:focus-visible { outline:2px solid var(--o); outline-offset:3px; }
+
+/* ═══════════════════════════════════════════
+   DATOS SLIDER
+═══════════════════════════════════════════ */
+#s-datos { display:none; padding:var(--sp-xl) var(--sp-md); border-top:var(--border); text-align:center; }
+#s-datos.visible { display:block; animation:sectionIn var(--t-slow) .15s var(--ease-out) both; }
+.datos-slides-wrap { max-width:680px; margin:var(--sp-lg) auto 0; }
+.dato-slide { display:none; }
+.dato-slide.active { display:block; animation:slideIn .4s var(--ease-out) both; }
+@keyframes slideIn { from{opacity:0;transform:translateX(16px);} to{opacity:1;transform:none;} }
+.dato-card {
+  background:var(--n2); border:var(--border);
+  padding:3.5rem 2.5rem; text-align:center; position:relative; overflow:hidden;
+}
+.dato-card::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:3px;
+  background:linear-gradient(to right,transparent,var(--o),transparent);
+}
+.dato-card::after {
+  content:''; position:absolute; inset:0; pointer-events:none;
+  background:radial-gradient(ellipse at 50% 0%,rgba(232,93,4,.055) 0%,transparent 65%);
+}
+.dc-label { font-size:var(--fs-xs); letter-spacing:.36em; text-transform:uppercase; color:var(--b3); margin-bottom:1.25rem; display:block; position:relative; z-index:1; }
+.dc-value {
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(4rem,13vw,7.5rem);
+  letter-spacing:.01em; color:var(--o); line-height:1;
+  display:block; position:relative; z-index:1;
+  text-shadow:0 0 80px rgba(232,93,4,.22);
+}
+.dc-sub { font-size:var(--fs-base); color:var(--b2); line-height:1.75; max-width:42ch; margin:1.35rem auto 0; position:relative; z-index:1; text-align:center; }
+.dc-visual { margin-top:2.25rem; position:relative; z-index:1; }
+.dc-bar-track { width:100%; max-width:280px; height:2px; background:var(--n4); position:relative; overflow:hidden; margin:0 auto .65rem; }
+.dc-bar-fill {
+  position:absolute; top:0; left:0; height:100%; width:0%;
+  background:linear-gradient(to right,var(--o3),var(--o),var(--o2));
+  transition:width 1.4s var(--ease-out); box-shadow:0 0 8px rgba(232,93,4,.5);
+}
+.dc-bar-pct { font-size:var(--fs-xs); letter-spacing:.2em; text-transform:uppercase; color:var(--b3); }
+.dc-compare { display:flex; align-items:flex-end; justify-content:center; gap:.35rem; margin-top:1.25rem; height:40px; }
+.dc-col { flex:1; max-width:22px; border-radius:2px 2px 0 0; background:var(--n4); transition:height 1s var(--ease-out),background var(--t-mid),opacity var(--t-mid); }
+.dc-col.highlighted { background:var(--o); box-shadow:0 0 8px rgba(232,93,4,.35); }
+.slider-dots { display:flex; justify-content:center; align-items:center; gap:.7rem; margin-top:var(--sp-md); }
+.sdot { width:6px; height:6px; border-radius:50%; background:var(--n5); border:none; cursor:pointer; transition:all var(--t-mid); }
+.sdot.active { background:var(--o); transform:scale(1.5); box-shadow:0 0 8px rgba(232,93,4,.45); }
+.sdot:focus-visible { outline:2px solid var(--o); outline-offset:3px; }
+.slider-arrows { display:flex; justify-content:center; gap:.75rem; margin-top:var(--sp-sm); }
+.sarrow {
+  width:40px; height:40px; background:none;
+  border:var(--border); color:var(--b3);
+  font-size:1rem; display:flex; align-items:center; justify-content:center;
+  transition:all var(--t-mid);
+}
+.sarrow:hover { border-color:var(--o); color:var(--o); box-shadow:var(--shadow-o); transform:scale(1.05); }
+.sarrow:active { transform:scale(.95); }
+.sarrow:focus-visible { outline:2px solid var(--o); outline-offset:3px; }
+
+/* ═══════════════════════════════════════════
+   CTA FIRMAS
+═══════════════════════════════════════════ */
+#s-cta { display:none; padding:var(--sp-xl) var(--sp-md); border-top:var(--border); }
+#s-cta.visible { display:block; animation:sectionIn var(--t-slow) .2s var(--ease-out) both; }
+.cta-wrap { max-width:600px; margin:0 auto; text-align:center; }
+.cta-titulo { font-size:var(--fs-lg); font-weight:500; color:var(--b); line-height:1.45; margin-bottom:.75rem; text-wrap:balance; text-align:center; }
+.cta-desc { font-size:var(--fs-base); color:var(--b2); line-height:1.75; margin-bottom:2.5rem; max-width:48ch; margin-left:auto; margin-right:auto; text-align:center; }
+.firma-box { background:var(--n2); border:var(--border); padding:2.5rem; text-align:left; }
+.firma-top { display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:var(--sp-sm); flex-wrap:wrap; gap:.75rem; }
+.firma-count { font-family:'Bebas Neue',sans-serif; font-size:3.5rem; letter-spacing:.02em; color:var(--o); line-height:1; }
+.firma-label { font-size:var(--fs-xs); letter-spacing:.18em; text-transform:uppercase; color:var(--b3); margin-top:.2rem; }
+.firma-meta { font-size:var(--fs-xs); letter-spacing:.15em; text-transform:uppercase; color:var(--b3); align-self:flex-end; }
+.firma-progress { width:100%; height:3px; background:var(--n4); margin-bottom:var(--sp-md); }
+.firma-bar { height:100%; background:var(--o); transition:width 1.2s var(--ease-out); box-shadow:0 0 8px rgba(232,93,4,.35); }
+.firma-inputs { display:flex; gap:.75rem; flex-wrap:wrap; margin-bottom:var(--sp-sm); }
+.firma-input {
+  flex:1; min-width:160px; padding:.85rem var(--sp-sm);
+  background:var(--n); border:var(--border);
+  color:var(--b); font-size:var(--fs-base); font-family:'Inter',sans-serif;
+  outline:none; transition:border-color var(--t-fast),box-shadow var(--t-fast);
+}
+.firma-input:focus { border-color:var(--o); box-shadow:0 0 0 3px rgba(232,93,4,.1); }
+.firma-input::placeholder { color:var(--b3); }
+.btn-firmar {
+  width:100%; padding:.95rem;
+  background:var(--o); color:#000;
+  font-size:var(--fs-xs); font-weight:700; letter-spacing:.26em; text-transform:uppercase;
+  border:none; position:relative; overflow:hidden;
+  transition:background var(--t-fast),transform var(--t-fast),box-shadow var(--t-fast);
+}
+.btn-firmar:hover { background:var(--o2); transform:translateY(-1px); box-shadow:0 4px 16px rgba(232,93,4,.28); }
+.btn-firmar:active { transform:translateY(0); }
+.btn-firmar:focus-visible { outline:2px solid var(--w); outline-offset:3px; }
+.firma-legal { font-size:var(--fs-xs); color:var(--b3); line-height:1.65; margin-top:.85rem; }
+.firma-ok { display:none; text-align:center; padding:var(--sp-md); }
+.firma-ok.visible { display:block; animation:sectionIn .4s var(--ease-out) both; }
+.firma-ok-icon { font-size:2.5rem; margin-bottom:.75rem; }
+.firma-ok-title { font-family:'Bebas Neue',sans-serif; font-size:2rem; letter-spacing:.08em; color:var(--o); }
+.firma-ok-sub { font-size:var(--fs-base); color:var(--b2); margin-top:.6rem; line-height:1.7; max-width:38ch; margin-left:auto; margin-right:auto; text-align:center; }
+.btn-share {
+  display:inline-flex; align-items:center; gap:.65rem;
+  margin-top:1.5rem; padding:.75rem 1.75rem;
+  background:transparent; border:var(--border); color:var(--b3);
+  font-size:var(--fs-xs); letter-spacing:.2em; text-transform:uppercase;
+  transition:border-color var(--t-fast),color var(--t-fast),background var(--t-fast),transform var(--t-fast);
+}
+.btn-share:hover { border-color:var(--o); color:var(--o); background:rgba(232,93,4,.05); transform:translateY(-1px); }
+.btn-share:focus-visible { outline:2px solid var(--o); outline-offset:3px; }
+
+/* ═══════════════════════════════════════════
+   CIERRE EMOCIONAL
+═══════════════════════════════════════════ */
+#s-cierre {
+  padding:var(--sp-2xl) var(--sp-md);
+  border-top:var(--border);
+  text-align:center;
+  position:relative; overflow:hidden;
+}
+#s-cierre::before {
+  content:''; position:absolute; inset:0;
+  background:radial-gradient(ellipse at 50% 100%,rgba(232,93,4,.055) 0%,transparent 65%);
+  pointer-events:none;
+}
+.cierre-inner { position:relative; z-index:1; max-width:680px; margin:0 auto; }
+.cierre-titulo {
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(2.5rem,7vw,5.5rem);
+  letter-spacing:.06em; line-height:1.05; color:var(--b);
+  opacity:0; transform:translateY(24px);
+}
+.cierre-titulo em { font-style:normal; color:var(--o); }
+.cierre-titulo .c-line { display:block; overflow:hidden; }
+.cierre-titulo .c-inner { display:block; }
+.cierre-sub {
+  font-size:var(--fs-base); color:var(--b3); line-height:1.8;
+  margin-top:var(--sp-md); max-width:48ch; margin-left:auto; margin-right:auto;
+  opacity:0; transform:translateY(16px);
+}
+.cierre-divider {
+  width:1px; height:60px;
+  background:linear-gradient(to bottom,transparent,var(--o),transparent);
+  margin:var(--sp-md) auto 0;
+  opacity:0;
+}
+
+/* ═══════════════════════════════════════════
+   MODAL
+═══════════════════════════════════════════ */
+#modal {
+  display:none; position:fixed; inset:0; z-index:800;
+  background:rgba(0,0,0,.92); backdrop-filter:blur(12px);
+  align-items:center; justify-content:center; padding:1.5rem;
+}
+#modal.open { display:flex; }
+.modal-inner {
+  background:var(--n2); border:var(--border);
+  max-width:520px; width:100%; padding:2.5rem; position:relative;
+  animation:modalIn .4s var(--ease-out) both;
+}
+@keyframes modalIn { from{opacity:0;transform:scale(.96) translateY(12px);} }
+.modal-close {
+  position:absolute; top:var(--sp-sm); right:var(--sp-sm);
+  background:none; border:1px solid transparent; color:var(--b3);
+  font-size:1rem; width:32px; height:32px;
+  display:flex; align-items:center; justify-content:center;
+  transition:color var(--t-fast),border-color var(--t-fast),background var(--t-fast),transform var(--t-fast);
+}
+.modal-close:hover { color:var(--o); border-color:var(--n5); background:var(--n3); transform:rotate(90deg); }
+.modal-close:focus-visible { outline:2px solid var(--o); outline-offset:3px; }
+.modal-media { width:100%; height:260px; background:var(--n3); margin-bottom:1.5rem; position:relative; overflow:hidden; }
+.modal-model-ph { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:.75rem; }
+.modal-scan {
+  position:absolute; top:0; left:-100%; width:60%; height:1px;
+  background:linear-gradient(to right,transparent,var(--o),transparent);
+  animation:scanLine 2.5s ease-in-out infinite;
+}
+.modal-estado { font-size:var(--fs-xs); letter-spacing:.2em; text-transform:uppercase; color:var(--o); border:var(--border-o); padding:.22rem .6rem; display:inline-block; margin-bottom:.75rem; }
+.modal-nombre { font-family:'Bebas Neue',sans-serif; font-size:2rem; letter-spacing:.06em; color:var(--b); margin-bottom:.2rem; line-height:1; }
+.modal-cientifico { font-size:var(--fs-sm); color:var(--b3); font-style:italic; margin-bottom:var(--sp-sm); }
+.modal-texto { font-size:var(--fs-base); color:var(--b2); line-height:1.75; }
+
+/* FOOTER */
+footer { padding:2.5rem var(--sp-md); text-align:center; border-top:var(--border); }
+.footer-txt { font-size:var(--fs-xs); letter-spacing:.22em; text-transform:uppercase; color:var(--b3); line-height:2.2; }
+.footer-txt span { color:var(--o); }
+
+/* ═══════════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════════ */
+@media(min-width:720px){
+  .mapa-layout { flex-direction:row; align-items:flex-start; justify-content:center; }
+  .mapa-png-wrap { max-width:260px; }
+  .zona-cards { max-width:none; flex:1; }
+}
+@media(max-width:540px){
+  .fauna-grid { grid-template-columns:1fr; }
+  .visor-compass { display:none; }
+  .hero-stats { max-width:100%; }
+  .visor-topbar { padding:var(--sp-sm) 1.25rem; gap:.65rem; }
+  .cierre-titulo { font-size:clamp(2rem,8vw,3.5rem); }
+}
+</style>
+</head>
+<body>
+
+<!-- INTRO -->
+<div id="intro" role="dialog" aria-modal="true" aria-label="Pantalla de entrada a SUBSUELO">
+  <div class="intro-noise" aria-hidden="true"></div>
+  <div class="intro-glow" aria-hidden="true"></div>
+  <div class="intro-particles" id="intro-particles" aria-hidden="true"></div>
+  <div class="intro-content">
+    <div class="intro-logo" role="heading" aria-level="1"><em>SUBSUELO</em></div>
+    <p class="intro-tagline">Tres territorios colombianos en riesgo por el fracking</p>
+    <button class="intro-cta" onclick="entrar()">Explorar los territorios →</button>
+  </div>
+  <button class="intro-skip" onclick="entrar()" aria-label="Saltar introducción">Saltar intro</button>
+  <div class="intro-progress" aria-hidden="true">
+    <div class="intro-progress-bar" id="intro-bar"></div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div id="main" aria-hidden="true">
+
+  <nav role="navigation" aria-label="Navegación principal">
+    <div class="nav-logo" aria-label="SUBSUELO — inicio"><span>SUBSUELO</span></div>
+    <div class="nav-tag" aria-hidden="true">Colombia libre de fracking</div>
+  </nav>
+
+  <!-- HERO -->
+  <section id="s-hero" aria-labelledby="hero-title">
+    <div class="hero-bg-grid" aria-hidden="true"></div>
+    <div class="hero-bg-glow" aria-hidden="true"></div>
+    <div class="hero-inner">
+      <h1 class="hero-title" id="hero-title">
+        <span class="line"><span class="line-inner">¿QUÉ HAY</span></span>
+        <span class="line"><span class="line-inner">BAJO NUESTROS</span></span>
+        <span class="line"><span class="line-inner"><em>PIES?</em></span></span>
+      </h1>
+      <p class="hero-sub">
+        Explora tres territorios colombianos donde el fracking podría transformar el paisaje, la biodiversidad y el futuro de sus comunidades.
+      </p>
+      <div class="hero-stats" role="list" aria-label="Cifras clave">
+        <div class="hstat" role="listitem">
+          <span class="hstat-n" aria-label="3 zonas en riesgo">3</span>
+          <span class="hstat-l">Zonas en riesgo</span>
+        </div>
+        <div class="hstat" role="listitem">
+          <span class="hstat-n" aria-label="44 millones de litros por pozo">44M</span>
+          <span class="hstat-l">Litros de agua por pozo</span>
+        </div>
+        <div class="hstat" role="listitem">
+          <span class="hstat-n" aria-label="Daño permanente">∞</span>
+          <span class="hstat-l">El daño no se revierte</span>
+        </div>
+      </div>
+      <div class="hero-scroll"
+           onclick="document.getElementById('s-mapa').scrollIntoView({behavior:'smooth'})"
+           role="button" tabindex="0" aria-label="Ver los territorios"
+           onkeydown="if(event.key==='Enter')this.click()">
+        <span class="hero-scroll-label">Ver los territorios</span>
+        <div class="hero-scroll-line" aria-hidden="true"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MAPA -->
+  <section id="s-mapa" aria-labelledby="mapa-title">
+    <div class="section-header">
+      <h2 class="section-title" id="mapa-title">¿Dónde ocurriría el fracking?</h2>
+      <p class="section-desc">Estos tres ecosistemas concentran biodiversidad única, comunidades históricas y agua dulce que Colombia no puede perder. Toca un punto del mapa para explorar cada zona.</p>
+    </div>
+    <div class="mapa-layout">
+      <div class="mapa-png-wrap" role="img" aria-label="Mapa de Colombia con las tres zonas en riesgo señaladas">
+        <svg viewBox="0 0 300 430" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;" aria-hidden="true">
+          <defs>
+            <filter id="mapShadow">
+              <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="rgba(232,93,4,0.12)"/>
+            </filter>
+          </defs>
+          <g filter="url(#mapShadow)">
+            <path style="fill:#161612;stroke:#2e2c28;stroke-width:.8;" d="M190,18 L200,14 L215,12 L225,16 L235,22 L242,20 L248,26 L252,32 L248,42 L255,48 L258,55 L265,58 L268,65 L262,70 L270,78 L268,88 L260,92 L265,100 L262,110 L252,114 L256,122 L258,132 L252,140 L248,150 L238,156 L242,166 L238,176 L228,182 L230,194 L222,204 L210,210 L208,222 L198,232 L185,238 L182,250 L172,262 L164,268 L158,276 L150,282 L140,278 L132,284 L120,280 L110,272 L104,258 L100,244 L108,232 L102,220 L110,208 L100,196 L106,182 L96,168 L100,154 L92,140 L96,126 L86,112 L90,98 L80,84 L84,70 L76,56 L82,44 L90,36 L98,28 L110,20 L124,14 L138,10 L152,8 L165,10 L178,14 Z"/>
+            <path style="fill:#161612;stroke:#2e2c28;stroke-width:.8;" d="M242,20 L248,14 L260,10 L268,14 L272,22 L268,28 L260,32 L252,32 L248,26 Z"/>
+            <path style="fill:#141410;stroke:#2e2c28;stroke-width:.8;" d="M140,278 L132,284 L120,280 L115,292 L118,308 L112,322 L116,338 L112,352 L116,366 L112,380 L116,395 L114,410 L120,422 L130,428 L140,422 L148,410 L146,396 L152,382 L148,368 L154,354 L150,340 L156,326 L152,312 L158,298 L158,284 L150,282 Z"/>
+            <path style="fill:#141410;stroke:#2e2c28;stroke-width:.8;" d="M76,56 L60,68 L48,84 L38,100 L34,116 L38,132 L42,148 L40,164 L44,178 L48,192 L44,206 L50,218 L56,228 L66,232 L78,228 L88,218 L96,208 L100,196 L106,182 L96,168 L100,154 L92,140 L96,126 L86,112 L90,98 L80,84 Z"/>
+            <path style="fill:none;stroke:#1a2a18;stroke-width:.6;opacity:.45;" d="M159,268 L162,250 L158,232 L162,212 L159,192 L162,172 L158,152 L160,130 L156,108 L158,85 L152,65 L145,48"/>
+          </g>
+          <circle cx="154" cy="200" r="2" fill="none" stroke="#282820" stroke-width=".7"/>
+          <text x="160" y="204" style="fill:#282820;font-size:5.5px;font-family:Inter,sans-serif;">Bogotá</text>
+          <text x="148" y="145" style="fill:#222220;font-size:7px;font-family:Inter,sans-serif;letter-spacing:3px;text-anchor:middle;">COLOMBIA</text>
+          <g class="zona-trigger" id="zt-magdalena" onclick="abrirZona('magdalena')" role="button" tabindex="0" aria-label="Explorar Zona 1: Ciénaga de Chucurí" onkeydown="if(event.key==='Enter')abrirZona('magdalena')">
+            <circle class="zona-ring" cx="159" cy="140" r="10" style="animation-delay:0s"/>
+            <circle class="zona-ring zona-ring-2" cx="159" cy="140" r="10" style="animation-delay:.8s"/>
+            <circle class="zona-dot" cx="159" cy="140" r="8"/>
+            <text class="zona-num" x="159" y="140">1</text>
+            <text class="zona-lbl" x="170" y="136">Magdalena</text>
+            <text class="zona-lbl" x="170" y="145">Medio</text>
+          </g>
+          <g class="zona-trigger" id="zt-catatumbo" onclick="abrirZona('catatumbo')" role="button" tabindex="0" aria-label="Explorar Zona 2: Río Catatumbo" onkeydown="if(event.key==='Enter')abrirZona('catatumbo')">
+            <circle class="zona-ring" cx="182" cy="99" r="10" style="animation-delay:.9s"/>
+            <circle class="zona-ring zona-ring-2" cx="182" cy="99" r="10" style="animation-delay:1.7s"/>
+            <circle class="zona-dot" cx="182" cy="99" r="8"/>
+            <text class="zona-num" x="182" y="99">2</text>
+            <text class="zona-lbl" x="167" y="93" style="text-anchor:end;">Catatumbo</text>
+            <text class="zona-lbl" x="167" y="102" style="text-anchor:end;">N. Santander</text>
+          </g>
+          <g class="zona-trigger" id="zt-putumayo" onclick="abrirZona('putumayo')" role="button" tabindex="0" aria-label="Explorar Zona 3: Río Mocoa" onkeydown="if(event.key==='Enter')abrirZona('putumayo')">
+            <circle class="zona-ring" cx="105" cy="309" r="10" style="animation-delay:1.8s"/>
+            <circle class="zona-ring zona-ring-2" cx="105" cy="309" r="10" style="animation-delay:2.6s"/>
+            <circle class="zona-dot" cx="105" cy="309" r="8"/>
+            <text class="zona-num" x="105" y="309">3</text>
+            <text class="zona-lbl" x="116" y="305">Putumayo</text>
+            <text class="zona-lbl" x="116" y="314">Amazonía</text>
+          </g>
+        </svg>
+      </div>
+      <div class="zona-cards" role="list" aria-label="Lista de zonas en riesgo">
+        <div class="zona-card" id="zc-magdalena" onclick="abrirZona('magdalena')" role="listitem" tabindex="0" aria-label="Explorar Zona 1: Ciénaga de Chucurí" onkeydown="if(event.key==='Enter')abrirZona('magdalena')">
+          <div class="zc-num" aria-hidden="true">01</div>
+          <div class="zc-info">
+            <div class="zc-nombre">Ciénaga de Chucurí</div>
+            <div class="zc-region">Santander · Magdalena Medio</div>
+          </div>
+          <div class="zc-arrow" aria-hidden="true">→</div>
+        </div>
+        <div class="zona-card" id="zc-catatumbo" onclick="abrirZona('catatumbo')" role="listitem" tabindex="0" aria-label="Explorar Zona 2: Río Catatumbo" onkeydown="if(event.key==='Enter')abrirZona('catatumbo')">
+          <div class="zc-num" aria-hidden="true">02</div>
+          <div class="zc-info">
+            <div class="zc-nombre">Río Catatumbo</div>
+            <div class="zc-region">Norte de Santander · Territorio Barí</div>
+          </div>
+          <div class="zc-arrow" aria-hidden="true">→</div>
+        </div>
+        <div class="zona-card" id="zc-putumayo" onclick="abrirZona('putumayo')" role="listitem" tabindex="0" aria-label="Explorar Zona 3: Río Mocoa" onkeydown="if(event.key==='Enter')abrirZona('putumayo')">
+          <div class="zc-num" aria-hidden="true">03</div>
+          <div class="zc-info">
+            <div class="zc-nombre">Río Mocoa</div>
+            <div class="zc-region">Putumayo · Amazonía colombiana</div>
+          </div>
+          <div class="zc-arrow" aria-hidden="true">→</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VISOR 360 -->
+  <section id="s-visor" aria-labelledby="visor-label">
+    <div class="visor-topbar">
+      <button class="visor-back" onclick="cerrar()" aria-label="Volver al mapa de territorios">
+        <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M10 12L6 8L10 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+        </svg>
+        Volver al mapa
+      </button>
+      <div class="visor-divider" aria-hidden="true"></div>
+      <div class="visor-meta">
+        <span class="visor-zona-label" id="visor-label" aria-live="polite">—</span>
+        <span class="visor-coords" id="visor-coords" aria-live="polite">—</span>
+      </div>
+      <div class="visor-badge360" aria-label="Panorama 360 grados interactivo">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.2"/>
+          <ellipse cx="12" cy="12" rx="4" ry="9" stroke="currentColor" stroke-width="1"/>
+          <path d="M3 12h18" stroke="currentColor" stroke-width="1"/>
+        </svg>
+        Panorama 360°
+      </div>
+      <div class="visor-compass" aria-hidden="true" title="Gira la imagen arrastrando">
+        <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="16" cy="16" r="14" stroke="currentColor" stroke-width=".8" opacity=".4"/>
+          <path d="M16 4L18 14H14L16 4Z" fill="#E85D04"/>
+          <path d="M16 28L14 18H18L16 28Z" fill="currentColor" opacity=".25"/>
+          <circle cx="16" cy="16" r="1.5" fill="currentColor" opacity=".4"/>
+          <text x="16" y="9" text-anchor="middle" style="fill:#E85D04;font-size:4px;font-family:Inter,sans-serif;font-weight:700;">N</text>
+        </svg>
+      </div>
+    </div>
+    <div class="escena-wrap">
+      <div class="escena-loader" id="escena-loader" aria-label="Cargando panorama" role="status">
+        <div class="loader-ring" aria-hidden="true"></div>
+        <div class="loader-bar" aria-hidden="true"><div class="loader-bar-fill"></div></div>
+        <p class="loader-txt" id="loader-txt">Cargando panorama 360°</p>
+      </div>
+      <div class="escena-chip" id="escena-chip" aria-live="polite">Panorama 360° — usa las miniaturas para cambiar de escena</div>
+      <div class="escena-hint" id="escena-hint">Arrastra para explorar el entorno →</div>
+      <div class="escena-inner" id="escena-inner"></div>
+    </div>
+  </section>
+
+  <!-- FAUNA -->
+  <section id="s-fauna" aria-labelledby="fauna-title">
+    <div class="section-header">
+      <span class="section-eye">Fauna amenazada</span>
+      <h2 class="section-title" id="fauna-title">Especies que solo existen aquí</h2>
+      <p class="section-desc">Estas especies no viven en ningún otro lugar del mundo. Si se fractura el subsuelo de estas zonas, no tienen a dónde ir.</p>
+    </div>
+    <div class="fauna-grid" id="fauna-grid" role="list"></div>
+  </section>
+
+  <!-- DATOS SLIDER -->
+  <section id="s-datos" aria-labelledby="datos-title">
+    <div class="section-header">
+      <span class="section-eye">Cifras documentadas</span>
+      <h2 class="section-title" id="datos-title">Lo que dice la evidencia</h2>
+      <p class="section-desc">Datos de informes oficiales, estudios científicos y organizaciones ambientales verificadas.</p>
+    </div>
+    <div class="datos-slides-wrap">
+      <div id="datos-slides"></div>
+      <div class="slider-dots" id="slider-dots" role="tablist" aria-label="Navegar entre datos"></div>
+      <div class="slider-arrows">
+        <button class="sarrow" onclick="slideNav(-1)" aria-label="Ver dato anterior">←</button>
+        <button class="sarrow" onclick="slideNav(1)" aria-label="Ver dato siguiente">→</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA FIRMAS -->
+  <section id="s-cta" aria-labelledby="cta-title">
+    <div class="cta-wrap">
+      <span class="section-eye">Tu posición importa</span>
+      <h2 class="cta-titulo" id="cta-title" aria-live="polite">—</h2>
+      <p class="cta-desc" id="cta-desc" aria-live="polite">—</p>
+      <div class="firma-box">
+        <div class="firma-top">
+          <div>
+            <div class="firma-count" id="firma-count" aria-label="Firmas recibidas">1.247</div>
+            <div class="firma-label">personas ya firmaron</div>
+          </div>
+          <div class="firma-meta">Meta: 10.000 firmas</div>
+        </div>
+        <div class="firma-progress" role="progressbar" aria-valuenow="12" aria-valuemin="0" aria-valuemax="100" aria-label="Progreso: 1247 de 10000 firmas">
+          <div class="firma-bar" id="firma-bar" style="width:12.47%"></div>
+        </div>
+        <div id="firma-form">
+          <div class="firma-inputs">
+            <input class="firma-input" id="fi-nombre" type="text" placeholder="Tu nombre completo" autocomplete="given-name" aria-label="Tu nombre completo" required>
+            <input class="firma-input" id="fi-email" type="email" placeholder="Tu correo electrónico" autocomplete="email" aria-label="Tu correo electrónico" required>
+          </div>
+          <button class="btn-firmar" onclick="firmar()">Agregar mi firma →</button>
+          <p class="firma-legal">Esta firma es simbólica y educativa. No compartimos tu información con terceros.</p>
+        </div>
+        <div class="firma-ok" id="firma-ok" role="status" aria-live="polite">
+          <div class="firma-ok-icon" aria-hidden="true">✊</div>
+          <div class="firma-ok-title">Firma registrada.</div>
+          <p class="firma-ok-sub">Comparte este panorama con alguien más. Cada persona que lo ve, entiende lo que está en juego.</p>
+        </div>
+      </div>
+      <button class="btn-share" onclick="compartir()">Compartir este territorio ↗</button>
+    </div>
+  </section>
+
+  <!-- CIERRE EMOCIONAL -->
+  <section id="s-cierre" aria-labelledby="cierre-titulo">
+    <div class="cierre-inner">
+      <h2 class="cierre-titulo" id="cierre-titulo">
+        <span class="c-line"><span class="c-inner">Los paisajes <em>cambian.</em></span></span>
+        <span class="c-line"><span class="c-inner">Las especies <em>desaparecen.</em></span></span>
+        <span class="c-line"><span class="c-inner">Las decisiones <em>permanecen.</em></span></span>
+      </h2>
+      <p class="cierre-sub">Cada decisión sobre el territorio deja una huella que puede durar generaciones.</p>
+      <div class="cierre-divider" aria-hidden="true"></div>
+    </div>
+  </section>
+
+  <footer role="contentinfo">
+    <div class="footer-txt">
+      <span>SUBSUELO</span> — Proyecto educativo sobre el fracking en Colombia · 2026<br>
+      Fuentes: Ministerio de Ambiente · Censat Agua Viva · WWF Colombia · Parques Nacionales Naturales
+    </div>
+  </footer>
+
+</div>
+
+<!-- MODAL FAUNA -->
+<div id="modal" role="dialog" aria-modal="true" aria-labelledby="modal-nombre">
+  <div class="modal-inner">
+    <button class="modal-close" onclick="cerrarModal()" aria-label="Cerrar ficha de especie">✕</button>
+    <div class="modal-media" id="modal-media" aria-label="Animal en su hábitat natural">
+      <div id="modal-video-wrap" style="display:none;width:100%;height:100%;position:relative;">
+        <iframe id="modal-video" src="" title="Video del animal en su hábitat"
+          frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen style="width:100%;height:100%;border:none;"></iframe>
+      </div>
+      <div id="modal-3d-wrap" style="display:none;width:100%;height:100%;">
+        <model-viewer id="modal-mv" alt="" auto-rotate camera-controls shadow-intensity="1" exposure="1.1" loading="lazy" style="width:100%;height:100%;--poster-color:transparent;"></model-viewer>
+      </div>
+      <div class="modal-model-ph" id="modal-ph">
+        <div class="modal-scan" aria-hidden="true"></div>
+        <div class="fauna-ph-icon">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path stroke-width="1.2" fill="none" d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+          </svg>
+        </div>
+        <div class="fauna-ph-label">Video · Modelo 3D<br><span style="color:var(--o);opacity:.4;font-size:.38rem;">PRÓXIMAMENTE</span></div>
+      </div>
+    </div>
+    <div class="modal-estado" id="modal-estado">—</div>
+    <h3 class="modal-nombre" id="modal-nombre">—</h3>
+    <p class="modal-cientifico" id="modal-cientifico">—</p>
+    <p class="modal-texto" id="modal-texto">—</p>
+  </div>
+</div>
+
+<script>
+/* ════════════════════════════════════
+   DATOS
+════════════════════════════════════ */
+const LOADER_TEXTS = {
+  magdalena: 'Preparando recorrido...',
+  catatumbo: 'Conectando con el territorio...',
+  putumayo:  'Cargando panorama amazónico...',
+};
+
+const ZONAS = {
+  magdalena: {
+    label:'Zona 01 — Ciénaga de Chucurí', coords:'7.07°N, 73.85°O · Santander',
+    kuula:'https://kuula.co/share/collection/7TJyS?logo=1&info=1&fs=1&vr=0&sd=1&thumbs=1',
+    fauna:[
+      { nom:'Manatí Antillano', ci:'Trichechus manatus', est:'En peligro crítico',
+        desc:'Ya desapareció de varias ciénagas del Magdalena por contaminación. Es el único mamífero acuático nativo de Colombia y no puede sobrevivir en aguas contaminadas con químicos de perforación.',
+        glb:'manati.glb', videoUrl:'', bg:'#0d1a0a' },
+      { nom:'Jaguar Americano', ci:'Panthera onca', est:'Vulnerable',
+        desc:'El felino más grande de América necesita territorios extensos sin fragmentar. El Magdalena Medio es uno de sus últimos corredores activos en Colombia.',
+        glb:'jaguar.glb', videoUrl:'', bg:'#1a1200' },
+    ],
+    slides:[
+      { l:'Pozos proyectados en la zona', v:'13.000–19.000', s:'Solo en el Magdalena Medio. Cada pozo requiere entre 7 y 44 millones de litros de agua, extraídos directamente de la cuenca.', pct:95 },
+      { l:'Bosque original que queda', v:'15%', s:'El Magdalena Medio ya perdió el 85% de su cobertura forestal. El fracking eliminaría lo que sobrevive para abrir paso a infraestructura de perforación.', pct:15 },
+      { l:'Agua que no puede recuperarse', v:'85%', s:'Del agua usada en cada pozo queda contaminada con químicos industriales. No puede purificarse ni usarse de nuevo.', pct:85 },
+      { l:'Premio ambiental internacional', v:'2026', s:'Yuvelis Morales, lideresa de Puerto Wilches, ganó el Premio Goldman —el reconocimiento ambiental más importante del mundo— por resistir el fracking aquí.', pct:100 },
+    ],
+    ctaTitulo:'El río Magdalena todavía puede protegerse.',
+    ctaDesc:'Esta fue la primera zona donde se aprobaron pilotos de fracking. Las comunidades lograron detenerlos. La decisión sigue abierta.',
+  },
+  catatumbo: {
+    label:'Zona 02 — Río Catatumbo', coords:'8.66°N, 72.73°O · Norte de Santander',
+    kuula:'https://kuula.co/share/collection/7TJzb?logo=1&info=1&fs=1&vr=0&sd=1&thumbs=1',
+    fauna:[
+      { nom:'Danta o Tapir Amazónico', ci:'Tapirus terrestris', est:'Vulnerable',
+        desc:'El mamífero terrestre más grande de Colombia. Actúa como dispersor de semillas clave para la regeneración del bosque. Su desaparición desestructura la cadena de vida del ecosistema.',
+        glb:'danta.glb', videoUrl:'', bg:'#0a1200' },
+      { nom:'Mono Araña del Norte', ci:'Ateles hybridus', est:'En peligro crítico',
+        desc:'Parte esencial de la dieta del pueblo Barí y dispersor clave de semillas. Su desaparición afectaría directamente la regeneración del ecosistema y la seguridad alimentaria.',
+        glb:'mono arana.glb', videoUrl:'', bg:'#100a00' },
+    ],
+    slides:[
+      { l:'Extensión del Parque Nacional', v:'160.684 ha', s:'El PNN Catatumbo Barí protege bosque húmedo tropical con árboles de hasta 60 metros. Uno de los ecosistemas más biodiversos del país.', pct:80 },
+      { l:'Comunidades Barí en la región', v:'25', s:'Distribuidas en 5 municipios. La mayoría de los contratos mineros existentes se firmaron sin la consulta previa que exige la Constitución.', pct:60 },
+      { l:'Empresas mineras ya activas', v:'26', s:'Ya operan en territorio Barí con licencias sin consulta previa. Cada nuevo contrato agranda ese precedente.', pct:70 },
+      { l:'Especies de aves amenazadas', v:'+73', s:'En Norte de Santander. La mayoría son endémicas del Catatumbo y no existen en ningún otro lugar del mundo.', pct:73 },
+    ],
+    ctaTitulo:'El pueblo Barí lleva siglos cuidando este territorio.',
+    ctaDesc:'Tienen derecho a ser consultados antes de cualquier intervención. Ese derecho se está ignorando.',
+  },
+  putumayo: {
+    label:'Zona 03 — Río Mocoa', coords:'0.50°N, 76.50°O · Putumayo',
+    kuula:'https://kuula.co/share/collection/7TJzg?logo=1&info=1&fs=1&vr=0&sd=1&thumbs=1',
+    fauna:[
+      { nom:'Tortuga Amazónica', ci:'Podocnemis expansa', est:'Vulnerable',
+        desc:'Ya existen registros documentados de pérdida de tortugas en el corredor Andes-Amazonas por actividad extractiva. Colombia alberga el 14% de los anfibios del mundo, concentrados aquí.',
+        glb:'tortuga.glb', videoUrl:'', bg:'#001a0a' },
+      { nom:'Caimán del Amazonas', ci:'Melanosuchus niger', est:'Vulnerable',
+        desc:'El mayor predador del ecosistema hídrico amazónico. Regula el equilibrio de la cuenca. Los derrames de petróleo afectan directamente su reproducción y cadena alimentaria.',
+        glb:'caiman.glb', videoUrl:'', bg:'#001008' },
+    ],
+    slides:[
+      { l:'Extensión de la cuenca amazónica', v:'11M ha', s:'La cuenca Caguán-Putumayo es la más extensa del Amazonas colombiano. El daño es permanente: el bosque primario no crece de nuevo.', pct:85 },
+      { l:'Indígenas con metales en sangre', v:'90%', s:'En comunidades amazónicas similares en Ecuador y Perú, el 90% tienen niveles tóxicos de metales pesados por actividad petrolera cercana.', pct:90 },
+      { l:'Biodiversidad mundial en la zona', v:'10%', s:'Del total de biodiversidad animal del planeta vive en la cuenca amazónica colombiana. La concentración más alta por km² en el mundo.', pct:60 },
+      { l:'Posibilidad de recuperación', v:'0%', s:'El daño en ecosistemas amazónicos primarios es permanente. No hay tecnología que revierta la pérdida de bosque primario una vez intervenido.', pct:0 },
+    ],
+    ctaTitulo:'La Amazonía colombiana no tiene segunda oportunidad.',
+    ctaDesc:'Los pueblos Siona e Inga comparten este río con Ecuador, Perú y Brasil. Contaminar aquí afecta a todo el sistema amazónico transnacional.',
+  }
+};
+
+/* ════════════════════════════════════
+   INTRO
+════════════════════════════════════ */
+const pCont = document.getElementById('intro-particles');
+for(let i=0;i<32;i++){
+  const p=document.createElement('div'); p.className='ipt';
+  const sz=Math.random()<.3?2:1;
+  p.style.cssText=`left:${Math.random()*100}%;width:${sz}px;height:${sz}px;--d:${7+Math.random()*12}s;--dl:${Math.random()*10}s;--dx:${(Math.random()-.5)*100}px;`;
+  pCont.appendChild(p);
+}
+let pTimer=null;
+const iBar=document.getElementById('intro-bar');
+(function startProgress(){
+  let w=0;
+  pTimer=setInterval(()=>{ w=Math.min(w+.18,100); iBar.style.width=w+'%'; if(w>=100) clearInterval(pTimer); },50);
+})();
+
+window.addEventListener('load',()=>{
+  if(typeof gsap==='undefined') return;
+  gsap.to('.intro-logo',   {opacity:1,y:0,duration:1.2,delay:.4,ease:'power3.out'});
+  gsap.to('.intro-tagline',{opacity:1,y:0,duration:1,  delay:.8,ease:'power3.out'});
+  gsap.to('.intro-cta',    {opacity:1,y:0,duration:1,  delay:1.1,ease:'power3.out'});
+});
+
+function entrar(){
+  clearInterval(pTimer);
+  document.getElementById('intro').classList.add('leaving');
+  setTimeout(()=>{
+    document.getElementById('intro').style.display='none';
+    const main=document.getElementById('main');
+    main.style.display='block';
+    main.removeAttribute('aria-hidden');
+    animarHero();
+    animarCierre();
+  },900);
+}
+
+function animarHero(){
+  if(typeof gsap==='undefined') return;
+  gsap.registerPlugin(ScrollTrigger);
+  gsap.from('.hero-title .line-inner',{opacity:0,y:'100%',duration:1.1,delay:.3,stagger:.12,ease:'power4.out'});
+  gsap.from('.hero-sub',              {opacity:0,y:24,    duration:1,  delay:.7, ease:'power3.out'});
+  gsap.from('.hero-stats',            {opacity:0,y:20,    duration:1,  delay:.9, ease:'power3.out'});
+  gsap.from('.hero-scroll',           {opacity:0,          duration:1,  delay:1.3,ease:'power3.out'});
+  gsap.utils.toArray('.section-header').forEach(el=>{
+    gsap.from(el.children,{opacity:0,y:28,duration:1,stagger:.1,ease:'power3.out',
+      scrollTrigger:{trigger:el,start:'top 82%',once:true}});
+  });
+  ScrollTrigger.create({
+    start:'top -60',
+    onToggle:({isActive})=>{ document.querySelector('nav').classList.toggle('scrolled',isActive); }
+  });
+}
+
+function animarCierre(){
+  if(typeof gsap==='undefined') return;
+  gsap.registerPlugin(ScrollTrigger);
+  const cierre=document.getElementById('s-cierre');
+  gsap.from('.cierre-titulo .c-inner',{
+    opacity:0,y:'100%',duration:1.2,stagger:.2,ease:'power4.out',
+    scrollTrigger:{trigger:cierre,start:'top 75%',once:true}
+  });
+  gsap.to('.cierre-sub',{
+    opacity:1,y:0,duration:1,delay:.5,ease:'power3.out',
+    scrollTrigger:{trigger:cierre,start:'top 70%',once:true}
+  });
+  gsap.to('.cierre-divider',{
+    opacity:1,duration:1.2,delay:.8,ease:'power2.out',
+    scrollTrigger:{trigger:cierre,start:'top 65%',once:true}
+  });
+}
+
+/* ════════════════════════════════════
+   ZONAS
+════════════════════════════════════ */
+let actual=null, slideIdx=0, totalSlides=0, firmas=1247;
+
+function abrirZona(id){
+  actual=id;
+  const z=ZONAS[id];
+  document.querySelectorAll('.zona-card').forEach(c=>c.classList.remove('active'));
+  document.getElementById('zc-'+id).classList.add('active');
+  document.querySelectorAll('.zona-trigger').forEach(g=>g.classList.remove('active'));
+  document.getElementById('zt-'+id).classList.add('active');
+  document.getElementById('visor-label').textContent =z.label;
+  document.getElementById('visor-coords').textContent=z.coords;
+  document.getElementById('escena-chip').textContent ='Panorama 360° — usa las miniaturas para cambiar de escena';
+  cargarEscena(id);
+  document.getElementById('s-visor').classList.add('visible');
+  buildFauna(z.fauna);
+  document.getElementById('s-fauna').classList.add('visible');
+  buildSlider(z.slides);
+  document.getElementById('s-datos').classList.add('visible');
+  document.getElementById('cta-title').textContent=z.ctaTitulo;
+  document.getElementById('cta-desc').textContent =z.ctaDesc;
+  document.getElementById('s-cta').classList.add('visible');
+  document.getElementById('firma-form').style.display='block';
+  document.getElementById('firma-ok').classList.remove('visible');
+  setTimeout(()=>{
+    const el=document.getElementById('s-visor');
+    window.scrollTo({top:el.getBoundingClientRect().top+window.scrollY-58,behavior:'smooth'});
+  },60);
+  if(typeof gsap!=='undefined'){
+    gsap.from('#s-visor .visor-topbar',{opacity:0,y:-12,duration:.5,ease:'power2.out'});
+    gsap.from('.fauna-card',{opacity:0,y:24,stagger:.1,duration:.6,delay:.2,ease:'power3.out',
+      scrollTrigger:{trigger:'#s-fauna',start:'top 82%',once:false}});
+  }
+}
+
+function cerrar(){
+  ['s-visor','s-fauna','s-datos','s-cta'].forEach(id=>{
+    document.getElementById(id).classList.remove('visible');
+  });
+  document.querySelectorAll('.zona-card, .zona-trigger').forEach(el=>el.classList.remove('active'));
+  document.getElementById('escena-inner').innerHTML='';
+  actual=null;
+  document.getElementById('s-mapa').scrollIntoView({behavior:'smooth'});
+}
+
+/* ════════════════════════════════════
+   VISOR — loader dinámico por zona
+════════════════════════════════════ */
+function cargarEscena(id){
+  const inner =document.getElementById('escena-inner');
+  const loader=document.getElementById('escena-loader');
+  const loaderTxt=document.getElementById('loader-txt');
+  const hint  =document.getElementById('escena-hint');
+  inner.innerHTML='';
+  hint.style.display='none';
+  // Texto dinámico según zona
+  loaderTxt.textContent=LOADER_TEXTS[id]||'Cargando panorama 360°';
+  loader.classList.remove('hidden');
+  const fill=loader.querySelector('.loader-bar-fill');
+  fill.style.animation='none'; fill.offsetHeight;
+  fill.style.animation='loadBar 1s ease forwards';
+  const iframe=document.createElement('iframe');
+  iframe.src=ZONAS[id].kuula;
+  iframe.setAttribute('frameborder','0');
+  iframe.setAttribute('allow','xr-spatial-tracking; gyroscope; accelerometer');
+  iframe.setAttribute('allowfullscreen','');
+  iframe.setAttribute('scrolling','no');
+  iframe.setAttribute('title',`Panorama 360° de ${ZONAS[id].label}`);
+  iframe.style.cssText='width:100%;height:100%;border:none;display:block;opacity:0;transition:opacity .5s ease;';
+  iframe.onload=()=>{
+    setTimeout(()=>{ loader.classList.add('hidden'); iframe.style.opacity='1'; },800);
+  };
+  inner.appendChild(iframe);
+}
+
+/* ════════════════════════════════════
+   FAUNA
+════════════════════════════════════ */
+function buildFauna(fauna){
+  const grid=document.getElementById('fauna-grid');
+  grid.innerHTML='';
+  fauna.forEach(f=>{
+    const card=document.createElement('div');
+    card.className='fauna-card';
+    card.setAttribute('role','listitem');
+    const modelHTML=f.glb
+      ?`<model-viewer src="${f.glb}" alt="Modelo 3D de ${f.nom}" auto-rotate camera-controls shadow-intensity="1" exposure="1.1" loading="lazy" style="width:100%;height:100%;--poster-color:transparent;"></model-viewer>`
+      :`<div class="fauna-model-scan" aria-hidden="true"></div>
+        <div class="fauna-ph-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke="currentColor" stroke-width="1.2" fill="none" d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+          </svg>
+        </div>
+        <div class="fauna-ph-label">${f.nom.toUpperCase()}<br><span style="color:var(--o);opacity:.4;font-size:.38rem;">MODELO 3D</span></div>`;
+    card.innerHTML=`
+      <div class="fauna-model-wrap">${modelHTML}</div>
+      <div class="fauna-estado">${f.est}</div>
+      <div class="fauna-nombre">${f.nom}<div class="fauna-nombre-sci">${f.ci}</div></div>
+      <p class="fauna-desc">${f.desc}</p>
+      <button class="fauna-btn"
+        onclick="abrirModal('${f.nom.replace(/'/g,"\\'")}','${f.ci}','${f.est}','${f.desc.replace(/'/g,"\\'").replace(/"/g,'\\"')}','${f.glb}','${f.videoUrl||""}')"
+        aria-label="Ver ${f.nom} en su hábitat natural">Ver en su hábitat natural →</button>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+/* ════════════════════════════════════
+   SLIDER
+════════════════════════════════════ */
+function buildSlider(slides){
+  slideIdx=0; totalSlides=slides.length;
+  const cont=document.getElementById('datos-slides');
+  const dots =document.getElementById('slider-dots');
+  cont.innerHTML=''; dots.innerHTML='';
+  slides.forEach((s,i)=>{
+    const cols=Array.from({length:10},(_,j)=>{
+      const active=j<Math.round(s.pct/10);
+      return `<div class="dc-col${active?' highlighted':''}" style="height:${10+(j*3)}px"></div>`;
+    }).join('');
+    const slide=document.createElement('div');
+    slide.className='dato-slide'+(i===0?' active':'');
+    slide.id='slide-'+i;
+    slide.setAttribute('role','tabpanel');
+    slide.setAttribute('aria-label',s.l);
+    slide.innerHTML=`
+      <div class="dato-card">
+        <span class="dc-label">${s.l}</span>
+        <span class="dc-value">${s.v}</span>
+        <p class="dc-sub">${s.s}</p>
+        <div class="dc-visual">
+          <div class="dc-bar-track">
+            <div class="dc-bar-fill" style="width:0%" data-pct="${s.pct}"></div>
+          </div>
+          <div class="dc-bar-pct">${s.pct}%</div>
+          <div class="dc-compare" aria-hidden="true">${cols}</div>
+        </div>
+      </div>`;
+    cont.appendChild(slide);
+    const dot=document.createElement('button');
+    dot.className='sdot'+(i===0?' active':'');
+    dot.setAttribute('role','tab');
+    dot.setAttribute('aria-label',`Dato ${i+1}: ${s.l}`);
+    dot.setAttribute('aria-selected',i===0?'true':'false');
+    dot.onclick=()=>goSlide(i);
+    dots.appendChild(dot);
+  });
+  setTimeout(animarSlideActivo,200);
+}
+
+function goSlide(i){
+  document.querySelectorAll('.dato-slide').forEach((s,j)=>s.classList.toggle('active',j===i));
+  document.querySelectorAll('.sdot').forEach((d,j)=>{
+    d.classList.toggle('active',j===i);
+    d.setAttribute('aria-selected',j===i?'true':'false');
+  });
+  slideIdx=i;
+  setTimeout(animarSlideActivo,60);
+  if(typeof gsap!=='undefined'){
+    gsap.from(`#slide-${i} .dato-card`,{opacity:0,x:16,duration:.4,ease:'power2.out'});
+  }
+}
+
+function animarSlideActivo(){
+  const fill=document.querySelector('.dato-slide.active .dc-bar-fill');
+  if(fill){ fill.style.width='0%'; requestAnimationFrame(()=>{ fill.style.width=fill.dataset.pct+'%'; }); }
+  const cols=document.querySelectorAll('.dato-slide.active .dc-col');
+  cols.forEach((c,i)=>{ c.style.opacity='0'; setTimeout(()=>{ c.style.transition='opacity .3s'; c.style.opacity='1'; },i*40); });
+}
+
+function slideNav(dir){ goSlide((slideIdx+dir+totalSlides)%totalSlides); }
+
+/* ════════════════════════════════════
+   MODAL
+════════════════════════════════════ */
+function abrirModal(nom,ci,est,desc,glb,videoUrl){
+  document.getElementById('modal-nombre').textContent    =nom;
+  document.getElementById('modal-cientifico').textContent=ci;
+  document.getElementById('modal-estado').textContent    =est;
+  document.getElementById('modal-texto').textContent     =desc;
+  const videoWrap=document.getElementById('modal-video-wrap');
+  const d3Wrap   =document.getElementById('modal-3d-wrap');
+  const ph       =document.getElementById('modal-ph');
+  const mv       =document.getElementById('modal-mv');
+  const iframe   =document.getElementById('modal-video');
+  videoWrap.style.display='none';
+  d3Wrap.style.display   ='none';
+  ph.style.display       ='none';
+  iframe.src='';
+  if(videoUrl&&videoUrl!==''){
+    iframe.src=videoUrl;
+    videoWrap.style.display='block';
+  } else if(glb&&glb!==''){
+    mv.setAttribute('src',glb);
+    mv.setAttribute('alt',`Modelo 3D de ${nom}`);
+    d3Wrap.style.display='block';
+  } else {
+    ph.style.display='flex';
+  }
+  document.getElementById('modal').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function cerrarModal(){
+  document.getElementById('modal-video').src='';
+  document.getElementById('modal').classList.remove('open');
+  document.body.style.overflow='';
+}
+document.addEventListener('keydown',e=>{ if(e.key==='Escape') cerrarModal(); });
+
+/* ════════════════════════════════════
+   FIRMAS
+════════════════════════════════════ */
+function firmar(){
+  const n=document.getElementById('fi-nombre').value.trim();
+  const e=document.getElementById('fi-email').value.trim();
+  if(!n||!e){ alert('Por favor ingresa tu nombre y correo para firmar.'); return; }
+  firmas++;
+  const display=document.getElementById('firma-count');
+  const pct=Math.min((firmas/10000)*100,100);
+  if(typeof gsap!=='undefined'){
+    gsap.to({val:firmas-1},{val:firmas,duration:.6,ease:'power2.out',
+      onUpdate(){ display.textContent=Math.round(this.targets()[0].val).toLocaleString('es-CO'); }
+    });
+  } else { display.textContent=firmas.toLocaleString('es-CO'); }
+  const bar=document.getElementById('firma-bar');
+  bar.style.width=pct+'%';
+  bar.setAttribute('aria-valuenow',Math.round(pct));
+  document.getElementById('firma-form').style.display='none';
+  document.getElementById('firma-ok').classList.add('visible');
+}
+
+function compartir(){
+  if(!actual) return;
+  const z=ZONAS[actual];
+  const s=z.slides[0];
+  const txt=`${z.label}\n\n${z.ctaTitulo}\n\n${s.v} — ${s.s}\n\nSUBSUELO · Proyecto educativo contra el fracking en Colombia\n#NoAlFracking #Subsuelo #Colombia`;
+  if(navigator.share){ navigator.share({title:'SUBSUELO',text:txt}).catch(()=>{}); }
+  else { navigator.clipboard.writeText(txt).then(()=>alert('Texto copiado. Pégalo donde quieras compartirlo.')); }
+}
+</script>
+</body>
+</html>
