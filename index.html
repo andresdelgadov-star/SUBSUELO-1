@@ -660,7 +660,6 @@ footer { padding:2.5rem 2rem; text-align:center; border-top:1px solid var(--n3);
   <div class="intro-glow" aria-hidden="true"></div>
   <div class="intro-particles" id="intro-particles" aria-hidden="true"></div>
   <div class="intro-content">
-    <p class="intro-eyebrow">Colombia · 2025</p>
     <div class="intro-logo" role="heading" aria-level="1"><em>SUBSUELO</em></div>
     <p class="intro-tagline">Tres territorios colombianos en riesgo por el fracking</p>
     <button class="intro-cta" onclick="entrar()">
@@ -689,9 +688,6 @@ footer { padding:2.5rem 2rem; text-align:center; border-top:1px solid var(--n3);
     <div class="hero-bg-glow" aria-hidden="true"></div>
     <div class="hero-inner">
 
-      <p class="hero-eyebrow" aria-hidden="true">
-        Fracking en Colombia · 2025 · Decisión pendiente
-      </p>
 
       <h1 class="hero-title" id="hero-title">
         <span class="line"><span class="line-inner">¿<em>FRACTURAR</em></span></span>
@@ -985,9 +981,10 @@ footer { padding:2.5rem 2rem; text-align:center; border-top:1px solid var(--n3);
     <div class="modal-media" id="modal-media" aria-label="Animal en su hábitat natural">
       <!-- Video YouTube (cuando esté disponible) -->
       <div id="modal-video-wrap" style="display:none;width:100%;height:100%;position:relative;">
-        <iframe id="modal-video" src="" title="Video del animal en su hábitat"
-          frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowfullscreen style="width:100%;height:100%;border:none;"></iframe>
+        <video id="modal-video" controls autoplay muted playsinline
+          style="width:100%;height:100%;object-fit:cover;background:#000;">
+          Tu navegador no soporta video HTML5.
+        </video>
       </div>
       <!-- Modelo 3D GLB -->
       <div id="modal-3d-wrap" style="display:none;width:100%;height:100%;">
@@ -1027,14 +1024,14 @@ const ZONAS = {
       {
         nom: 'Manatí Antillano', ci: 'Trichechus manatus',
         est: 'En peligro crítico',
-        desc: 'Ya desapareció de varias ciénagas del Magdalena por contaminación. Es el único mamífero acuático nativo de Colombia y no puede sobrevivir en aguas contaminadas con químicos de perforación.',
-        glb: 'manati.glb', videoUrl: '', bg: '#0d1a0a'
+        desc: 'Vive en las ciénagas y caños del río Magdalena. Respira aire pero pasa su vida bajo el agua, entre raíces y plantas acuáticas. Necesita agua limpia, quieta y cálida. Cuando el agua se contamina, no tiene a dónde ir.',
+        glb: 'manati.glb', videoUrl: 'https://andresdelgadov-star.github.io/SUBSUELO-1/MANATI.mp4', bg: '#0d1a0a'
       },
       {
         nom: 'Jaguar Americano', ci: 'Panthera onca',
         est: 'Vulnerable',
-        desc: 'El felino más grande de América necesita territorios extensos sin fragmentar. El Magdalena Medio es uno de sus últimos corredores activos en Colombia. La industria del fracking requiere acceder con maquinaria pesada, lo que destruye ese corredor.',
-        glb: 'jaguar.glb', videoUrl: '', bg: '#1a1200'
+        desc: 'Recorre cientos de kilómetros de selva densa, ciénagas y ríos. El Magdalena Medio es uno de sus últimos corredores vivos en Colombia. Caza, duerme y se mueve en silencio entre la vegetación. Un territorio fracturado es un jaguar sin camino.',
+        glb: 'jaguar.glb', videoUrl: 'https://andresdelgadov-star.github.io/SUBSUELO-1/JAGUAR.mp4', bg: '#1a1200'
       },
     ],
     slides: [
@@ -1054,14 +1051,14 @@ const ZONAS = {
       {
         nom: 'Danta o Tapir Amazónico', ci: 'Tapirus terrestris',
         est: 'Vulnerable',
-        desc: 'El mamífero terrestre más grande de Colombia. En el Catatumbo actúa como dispersor de semillas clave para la regeneración del bosque. Su desaparición desestructura la cadena de vida del ecosistema entero.',
-        glb: 'danta.glb', videoUrl: '', bg: '#0a1200'
+        desc: 'Camina lento por el bosque húmedo del Catatumbo, come frutas y dispersa semillas que regeneran la selva. Es el jardinero del ecosistema. Donde hay danta, hay bosque vivo. Donde desaparece, el bosque empieza a morir.',
+        glb: 'danta.glb', videoUrl: 'https://andresdelgadov-star.github.io/SUBSUELO-1/DANTA.mp4', bg: '#0a1200'
       },
       {
         nom: 'Mono Araña del Norte', ci: 'Ateles hybridus',
         est: 'En peligro crítico',
-        desc: 'Parte esencial de la dieta del pueblo Barí y dispersor clave de semillas en el bosque. Su desaparición afectaría directamente la regeneración del ecosistema y la seguridad alimentaria de las comunidades.',
-        glb: 'mono arana.glb', videoUrl: '', bg: '#100a00'
+        desc: 'Vive en lo alto del dosel del bosque, entre las ramas más altas del Catatumbo. Se mueve en familia, come frutas maduras y las dispersa por toda la selva. El pueblo Barí lo conoce desde siempre. Es parte del mismo territorio que quieren proteger.',
+        glb: 'mono arana.glb', videoUrl: 'https://andresdelgadov-star.github.io/SUBSUELO-1/MONOARANA.mp4', bg: '#100a00'
       },
     ],
     slides: [
@@ -1081,14 +1078,14 @@ const ZONAS = {
       {
         nom: 'Tortuga Amazónica', ci: 'Podocnemis expansa',
         est: 'Vulnerable',
-        desc: 'Ya existen registros documentados de pérdida de tortugas en el corredor Andes-Amazonas por actividad extractiva. Colombia alberga el 14% de los anfibios del mundo, concentrados en esta zona.',
-        glb: 'tortuga.glb', videoUrl: '', bg: '#001a0a'
+        desc: 'Nace en las playas del río Mocoa, crece en sus aguas y regresa al mismo lugar décadas después. Lleva millones de años en la Amazonía. No necesita nada que el río no le dé. Solo necesita que el río siga limpio.',
+        glb: 'tortuga.glb', videoUrl: 'https://andresdelgadov-star.github.io/SUBSUELO-1/TORTUGA.mp4', bg: '#001a0a'
       },
       {
         nom: 'Caimán del Amazonas', ci: 'Melanosuchus niger',
         est: 'Vulnerable',
-        desc: 'Es el mayor predador del ecosistema hídrico amazónico y regula el equilibrio de la cuenca. Los derrames de petróleo en ríos de la región afectan su reproducción y cadena alimentaria.',
-        glb: 'caiman.glb', videoUrl: '', bg: '#001008'
+        desc: 'Habita los ríos y lagunas de la cuenca amazónica. Es el predador que mantiene el equilibrio del agua. Sin él, las poblaciones de peces se descontrolan y el ecosistema colapsa. Su presencia es señal de que el río está sano.',
+        glb: 'caiman.glb', videoUrl: 'https://andresdelgadov-star.github.io/SUBSUELO-1/CAIMAN.mp4', bg: '#001008'
       },
     ],
     slides: [
@@ -1122,7 +1119,6 @@ const iBar = document.getElementById('intro-bar');
 
 window.addEventListener('load', ()=>{
   if(typeof gsap === 'undefined') return;
-  gsap.to('.intro-eyebrow', { opacity:1, y:0, duration:1,   delay:.3,  ease:'power3.out' });
   gsap.to('.intro-logo',    { opacity:1, y:0, duration:1.2, delay:.5,  ease:'power3.out' });
   gsap.to('.intro-tagline', { opacity:1, y:0, duration:1,   delay:.9,  ease:'power3.out' });
   gsap.to('.intro-cta',     { opacity:1, y:0, duration:1,   delay:1.2, ease:'power3.out' });
@@ -1143,7 +1139,6 @@ function entrar(){
 function animarHero(){
   if(typeof gsap === 'undefined') return;
   gsap.registerPlugin(ScrollTrigger);
-  gsap.from('.hero-eyebrow',          { opacity:0, y:20,     duration:1,   delay:.2,  ease:'power3.out' });
   gsap.from('.hero-title .line-inner',{ opacity:0, y:'100%', duration:1.1, delay:.4, stagger:.15, ease:'power4.out' });
   gsap.from('.hero-sub',              { opacity:0, y:24,     duration:1,   delay:.8,  ease:'power3.out' });
   gsap.from('.hero-stats',            { opacity:0, y:20,     duration:1,   delay:1,   ease:'power3.out' });
@@ -1402,10 +1397,10 @@ function abrirModal(nom, ci, est, desc, glb, videoUrl){
 }
 function cerrarModalLimpiar(){
   // Limpiar video al cerrar para detener reproducción
-  document.getElementById('modal-video').src = '';
+  const v = document.getElementById('modal-video'); v.pause(); v.src = '';
 }
 function cerrarModal(){
-  document.getElementById('modal-video').src = '';
+  const v = document.getElementById('modal-video'); v.pause(); v.src = '';
   document.getElementById('modal').classList.remove('open');
   document.body.style.overflow = '';
 }
