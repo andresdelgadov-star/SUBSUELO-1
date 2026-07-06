@@ -1092,14 +1092,14 @@ const ZONAS = {
         nom: 'Manatí Antillano', ci: 'Trichechus manatus',
         est: 'En peligro crítico',
         desc: 'Vive en las ciénagas y caños del río Magdalena. Respira aire pero pasa su vida bajo el agua, entre raíces y plantas acuáticas. Necesita agua limpia, quieta y cálida. Cuando el agua se contamina, no tiene a dónde ir.',
-        glb: 'https://andresdelgadov-star.github.io/SUBSUELO-1/MANATI.glb',
+        glb: 'MANATI.glb',
         ejemplares: 'Menos de 1.000 individuos estimados en Colombia.', videoUrl: 'https://andresdelgadov-star.github.io/SUBSUELO-1/MANATI.mp4', bg: '#0d1a0a'
       },
       {
         nom: 'Jaguar Americano', ci: 'Panthera onca',
         est: 'Vulnerable',
         desc: 'Recorre cientos de kilómetros de selva densa, ciénagas y ríos. El Magdalena Medio es uno de sus últimos corredores vivos en Colombia. Caza, duerme y se mueve en silencio entre la vegetación. Un territorio fracturado es un jaguar sin camino.',
-        glb: 'https://andresdelgadov-star.github.io/SUBSUELO-1/JAGUAR.glb',
+        glb: 'JAGUAR.glb',
         ejemplares: 'Entre 800 y 1.200 jaguares quedan en Colombia.', videoUrl: 'https://andresdelgadov-star.github.io/SUBSUELO-1/JAGUAR.mp4', bg: '#1a1200'
       },
     ],
@@ -1121,14 +1121,14 @@ const ZONAS = {
         nom: 'Danta o Tapir Amazónico', ci: 'Tapirus terrestris',
         est: 'Vulnerable',
         desc: 'Camina lento por el bosque húmedo del Catatumbo, come frutas y dispersa semillas que regeneran la selva. Es el jardinero del ecosistema. Donde hay danta, hay bosque vivo. Donde desaparece, el bosque empieza a morir.',
-        glb: 'https://andresdelgadov-star.github.io/SUBSUELO-1/DANTA.glb',
+        glb: 'DANTA.glb',
         ejemplares: 'Menos de 500 dantas en el Catatumbo colombiano.', videoUrl: 'https://andresdelgadov-star.github.io/SUBSUELO-1/DANTA.mp4', bg: '#0a1200'
       },
       {
         nom: 'Mono Araña del Norte', ci: 'Ateles hybridus',
         est: 'En peligro crítico',
         desc: 'Vive en lo alto del dosel del bosque, entre las ramas más altas del Catatumbo. Se mueve en familia, come frutas maduras y las dispersa por toda la selva. El pueblo Barí lo conoce desde siempre. Es parte del mismo territorio que quieren proteger.',
-        glb: 'https://andresdelgadov-star.github.io/SUBSUELO-1/MONOARANA.glb',
+        glb: 'MONOARANA.glb',
         ejemplares: 'Población crítica: menos de 300 individuos en Colombia.', videoUrl: 'https://andresdelgadov-star.github.io/SUBSUELO-1/MONOARANA.mp4', bg: '#100a00'
       },
     ],
@@ -1150,14 +1150,14 @@ const ZONAS = {
         nom: 'Tortuga Amazónica', ci: 'Podocnemis expansa',
         est: 'Vulnerable',
         desc: 'Nace en las playas del río Mocoa, crece en sus aguas y regresa al mismo lugar décadas después. Lleva millones de años en la Amazonía. No necesita nada que el río no le dé. Solo necesita que el río siga limpio.',
-        glb: 'https://andresdelgadov-star.github.io/SUBSUELO-1/TORTUGA.glb',
+        glb: 'TORTUGA.glb',
         ejemplares: 'Colonias reproductoras en colapso en el Putumayo.', videoUrl: 'https://andresdelgadov-star.github.io/SUBSUELO-1/TORTUGA.mp4', bg: '#001a0a'
       },
       {
         nom: 'Caimán del Amazonas', ci: 'Melanosuchus niger',
         est: 'Vulnerable',
         desc: 'Habita los ríos y lagunas de la cuenca amazónica. Es el predador que mantiene el equilibrio del agua. Sin él, las poblaciones de peces se descontrolan y el ecosistema colapsa. Su presencia es señal de que el río está sano.',
-        glb: 'https://andresdelgadov-star.github.io/SUBSUELO-1/CAIMAN.glb',
+        glb: 'CAIMAN.glb',
         ejemplares: 'Población en recuperación pero altamente vulnerable.', videoUrl: 'https://andresdelgadov-star.github.io/SUBSUELO-1/CAIMAN.mp4', bg: '#001008'
       },
     ],
@@ -1386,7 +1386,16 @@ function buildFauna(fauna){
     card.setAttribute('role','listitem');
 
     const modelHTML = f.glb
-      ? `<model-viewer src="${f.glb}" alt="Modelo 3D de ${f.nom}" auto-rotate camera-controls shadow-intensity="1" exposure="1.1" loading="lazy" style="width:100%;height:100%;--poster-color:transparent;"></model-viewer>`
+      ? `<model-viewer
+            src="${f.glb}"
+            alt="Modelo 3D de ${f.nom}"
+            auto-rotate
+            camera-controls
+            shadow-intensity="1"
+            exposure="1.2"
+            loading="eager"
+            style="width:100%;height:100%;--poster-color:transparent;">
+         </model-viewer>`
       : `<div class="fauna-model-scan" aria-hidden="true"></div>
          <div class="fauna-ph-icon" aria-hidden="true">
            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
