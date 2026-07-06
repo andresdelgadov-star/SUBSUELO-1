@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -9,7 +10,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-<script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.3.0/model-viewer.min.js"></script>
+<script type="module" src="https://unpkg.com/@google/model-viewer@3.3.0/dist/model-viewer.min.js"></script>
 
 <style>
 /* ═══════════════════════════════════════════
@@ -359,12 +360,8 @@ nav.scrolled { padding:.8rem 2.5rem; }
 }
 .visor-zona-btn:hover { background:var(--o2); transform:translateY(-1px); box-shadow:0 4px 12px rgba(232,93,4,.35); }
 .visor-zona-btn:active { transform:translateY(0); }
-.visor-zona-btn.active-zona { background:var(--o3); box-shadow:0 0 0 2px var(--o); }
+.visor-zona-btn.active-zona { background:var(--n4); color:var(--b2); box-shadow:0 0 0 1px var(--n5); }
 .visor-zona-btn:focus-visible { outline:2px solid var(--w); outline-offset:2px; }
-.visor-zona-num {
-  font-family:'Bebas Neue',sans-serif; font-size:1rem;
-  color:#000; line-height:1; flex-shrink:0;
-}
 .visor-back {
   display:flex; align-items:center; gap:.45rem;
   font-size:var(--fs-xs); letter-spacing:.2em; text-transform:uppercase;
@@ -419,6 +416,25 @@ nav.scrolled { padding:.8rem 2.5rem; }
   color:rgba(160,144,128,.35); pointer-events:none; z-index:10;
   white-space:nowrap; display:none;
 }
+.escena-map-nav {
+  position:absolute; left:50%; bottom:4.25rem; transform:translateX(-50%);
+  z-index:12; display:flex; align-items:center; justify-content:center; gap:.75rem;
+  width:min(92vw,320px); pointer-events:auto;
+}
+.escena-map-btn {
+  display:flex; align-items:center; justify-content:center; gap:.75rem;
+  width:100%; min-width:0;
+  padding:.72rem .9rem; border:1px solid rgba(232,93,4,.42);
+  background:rgba(7,7,7,.82); color:var(--b);
+  backdrop-filter:blur(12px); font-size:var(--fs-xs); letter-spacing:.16em;
+  text-transform:uppercase; font-weight:700;
+  transition:background var(--t-fast), border-color var(--t-fast), transform var(--t-fast), color var(--t-fast);
+}
+.escena-map-btn:hover {
+  background:var(--o); border-color:var(--o); color:#000; transform:translateY(-2px);
+}
+.escena-map-btn:focus-visible { outline:2px solid var(--o); outline-offset:3px; }
+.escena-map-btn-arrow { flex-shrink:0; font-size:.9rem; }
 
 /* ═══════════════════════════════════════════
    FAUNA
@@ -635,7 +651,7 @@ nav.scrolled { padding:.8rem 2.5rem; }
 #modal.open { display:flex; }
 .modal-inner {
   background:var(--n2); border:1px solid var(--n3);
-  max-width:520px; width:100%; padding:2.5rem; position:relative;
+  max-width:860px; width:100%; padding:2.5rem; position:relative;
   animation:modalIn .4s var(--ease-out) both;
 }
 @keyframes modalIn { from{opacity:0;transform:scale(.96) translateY(12px);} }
@@ -649,6 +665,8 @@ nav.scrolled { padding:.8rem 2.5rem; }
 .modal-close:hover { color:var(--o); border-color:var(--n5); background:var(--n3); transform:rotate(90deg); }
 .modal-close:focus-visible { outline:2px solid var(--o); outline-offset:3px; }
 .modal-media { width:100%; height:260px; background:var(--n3); margin-bottom:1.5rem; position:relative; overflow:hidden; }
+.modal-media.video-mode { height:auto; aspect-ratio:16/9; }
+#modal-video { width:100%; height:100%; object-fit:cover; object-position:center; background:#000; }
 .modal-model-ph {
   position:absolute; inset:0;
   display:flex; flex-direction:column; align-items:center; justify-content:center; gap:.75rem;
@@ -681,6 +699,9 @@ footer { padding:2.5rem 2rem; text-align:center; border-top:1px solid var(--n3);
   .visor-compass { display:none; }
   .hero-stats { max-width:100%; }
   .visor-topbar { padding:1rem 1.25rem; gap:.65rem; }
+  .escena-wrap { min-height:520px; }
+  .escena-map-nav { bottom:3.75rem; flex-direction:column; width:calc(100% - 2rem); gap:.55rem; }
+  .escena-map-btn { width:100%; max-width:none; flex:none; }
 }
 </style>
 </head>
@@ -907,19 +928,20 @@ footer { padding:2.5rem 2rem; text-align:center; border-top:1px solid var(--n3);
         <p class="loader-txt">Cargando panorama 360°</p>
       </div>
       <div class="escena-chip" id="escena-chip" aria-live="polite">
-        Panorama 360° — usa las miniaturas para cambiar de escena
+        Panorama 360° — explora el territorio y sus efectos
       </div>
       <div class="escena-hint" id="escena-hint">Arrastra para explorar el entorno →</div>
+      <div class="escena-map-nav" id="escena-map-nav" aria-label="Cambiar a otro panorama 360"></div>
       <div class="escena-inner" id="escena-inner"></div>
     </div>
-    <!-- Botón ver fauna y datos -->
+    <!-- Botón ver efectos -->
     <div style="display:flex;justify-content:center;padding:1.5rem;background:var(--n2);border-bottom:1px solid var(--n3);">
-      <button onclick="document.getElementById('s-fauna').scrollIntoView({behavior:'smooth'})"
+      <button onclick="document.getElementById('s-datos').scrollIntoView({behavior:'smooth'})"
               style="display:flex;align-items:center;gap:.6rem;padding:.7rem 1.75rem;background:var(--o);color:#000;border:none;font-family:Inter,sans-serif;font-size:.58rem;font-weight:700;letter-spacing:.25em;text-transform:uppercase;cursor:pointer;transition:background .2s,transform .15s;"
               onmouseover="this.style.background='#FF6B1A';this.style.transform='translateY(-1px)'"
               onmouseout="this.style.background='#E85D04';this.style.transform='none'"
-              aria-label="Ver fauna y datos de esta zona">
-        Ver fauna y datos
+              aria-label="Ver efectos del fracking en esta zona">
+        Ver efectos fracking
         <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
           <path d="M3 5.5L7 9.5L11 5.5" stroke="#000" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
@@ -1024,8 +1046,7 @@ footer { padding:2.5rem 2rem; text-align:center; border-top:1px solid var(--n3);
     <div class="modal-media" id="modal-media" aria-label="Animal en su hábitat natural">
       <!-- Video YouTube (cuando esté disponible) -->
       <div id="modal-video-wrap" style="display:none;width:100%;height:100%;position:relative;">
-        <video id="modal-video" controls autoplay playsinline
-          style="width:100%;height:100%;object-fit:cover;background:#000;">
+        <video id="modal-video" controls autoplay playsinline>
           Tu navegador no soporta video HTML5.
         </video>
       </div>
@@ -1086,20 +1107,21 @@ const ZONAS = {
   magdalena: {
     label:  'Zona 01 — Ciénaga de Chucurí',
     coords: '7.07°N, 73.85°O · Santander',
-    kuula:  'https://kuula.co/share/collection/7TJyS?logo=1&info=1&fs=1&vr=0&sd=1&thumbs=1',
+    kuula:  'https://kuula.co/share/collection/7TJyS?logo=1&info=1&fs=1&vr=0&autorotate=0.08&thumbs=3&margin=9&alpha=0.60&inst=0',
+    kuulaFracking: 'https://kuula.co/share/collection/7Tc0p?logo=1&info=1&fs=1&vr=0&autorotate=0.08&thumbs=3&margin=9&alpha=0.60&inst=0',
     fauna: [
       {
         nom: 'Manatí Antillano', ci: 'Trichechus manatus',
         est: 'En peligro crítico',
         desc: 'Vive en las ciénagas y caños del río Magdalena. Respira aire pero pasa su vida bajo el agua, entre raíces y plantas acuáticas. Necesita agua limpia, quieta y cálida. Cuando el agua se contamina, no tiene a dónde ir.',
-        glb: 'MANATI.glb',
+        glb: 'https://andresdelgadov-star.github.io/SUBSUELO-1/MANATI.glb',
         ejemplares: 'Menos de 1.000 individuos estimados en Colombia.', videoUrl: 'https://andresdelgadov-star.github.io/SUBSUELO-1/MANATI.mp4', bg: '#0d1a0a'
       },
       {
         nom: 'Jaguar Americano', ci: 'Panthera onca',
         est: 'Vulnerable',
         desc: 'Recorre cientos de kilómetros de selva densa, ciénagas y ríos. El Magdalena Medio es uno de sus últimos corredores vivos en Colombia. Caza, duerme y se mueve en silencio entre la vegetación. Un territorio fracturado es un jaguar sin camino.',
-        glb: 'JAGUAR.glb',
+        glb: 'https://andresdelgadov-star.github.io/SUBSUELO-1/JAGUAR.glb',
         ejemplares: 'Entre 800 y 1.200 jaguares quedan en Colombia.', videoUrl: 'https://andresdelgadov-star.github.io/SUBSUELO-1/JAGUAR.mp4', bg: '#1a1200'
       },
     ],
@@ -1115,20 +1137,21 @@ const ZONAS = {
   catatumbo: {
     label:  'Zona 02 — Río Catatumbo',
     coords: '8.66°N, 72.73°O · Norte de Santander',
-    kuula:  'https://kuula.co/share/collection/7TJzb?logo=1&info=1&fs=1&vr=0&sd=1&thumbs=1',
+    kuula:  'https://kuula.co/share/collection/7TJzb?logo=1&info=1&fs=1&vr=0&autorotate=0.08&thumbs=3&margin=9&alpha=0.60&inst=0',
+    kuulaFracking: 'https://kuula.co/share/collection/7Tc0P?logo=1&info=1&fs=1&vr=0&autorotate=0.08&thumbs=3&margin=9&alpha=0.60&inst=0',
     fauna: [
       {
         nom: 'Danta o Tapir Amazónico', ci: 'Tapirus terrestris',
         est: 'Vulnerable',
         desc: 'Camina lento por el bosque húmedo del Catatumbo, come frutas y dispersa semillas que regeneran la selva. Es el jardinero del ecosistema. Donde hay danta, hay bosque vivo. Donde desaparece, el bosque empieza a morir.',
-        glb: 'DANTA.glb',
+        glb: 'https://andresdelgadov-star.github.io/SUBSUELO-1/DANTA.glb',
         ejemplares: 'Menos de 500 dantas en el Catatumbo colombiano.', videoUrl: 'https://andresdelgadov-star.github.io/SUBSUELO-1/DANTA.mp4', bg: '#0a1200'
       },
       {
         nom: 'Mono Araña del Norte', ci: 'Ateles hybridus',
         est: 'En peligro crítico',
         desc: 'Vive en lo alto del dosel del bosque, entre las ramas más altas del Catatumbo. Se mueve en familia, come frutas maduras y las dispersa por toda la selva. El pueblo Barí lo conoce desde siempre. Es parte del mismo territorio que quieren proteger.',
-        glb: 'MONOARANA.glb',
+        glb: 'https://andresdelgadov-star.github.io/SUBSUELO-1/MONOARANA.glb',
         ejemplares: 'Población crítica: menos de 300 individuos en Colombia.', videoUrl: 'https://andresdelgadov-star.github.io/SUBSUELO-1/MONOARANA.mp4', bg: '#100a00'
       },
     ],
@@ -1144,20 +1167,21 @@ const ZONAS = {
   putumayo: {
     label:  'Zona 03 — Río Mocoa',
     coords: '0.50°N, 76.50°O · Putumayo',
-    kuula:  'https://kuula.co/share/collection/7TJzg?logo=1&info=1&fs=1&vr=0&sd=1&thumbs=1',
+    kuula:  'https://kuula.co/share/collection/7TJzg?logo=1&info=1&fs=1&vr=0&autorotate=0.08&thumbs=3&margin=9&alpha=0.60&inst=0',
+    kuulaFracking: 'https://kuula.co/share/collection/7Tc01?logo=1&info=1&fs=1&vr=0&autorotate=0.08&thumbs=3&margin=9&alpha=0.60&inst=0',
     fauna: [
       {
         nom: 'Tortuga Amazónica', ci: 'Podocnemis expansa',
         est: 'Vulnerable',
         desc: 'Nace en las playas del río Mocoa, crece en sus aguas y regresa al mismo lugar décadas después. Lleva millones de años en la Amazonía. No necesita nada que el río no le dé. Solo necesita que el río siga limpio.',
-        glb: 'TORTUGA.glb',
+        glb: 'https://andresdelgadov-star.github.io/SUBSUELO-1/TORTUGA.glb',
         ejemplares: 'Colonias reproductoras en colapso en el Putumayo.', videoUrl: 'https://andresdelgadov-star.github.io/SUBSUELO-1/TORTUGA.mp4', bg: '#001a0a'
       },
       {
         nom: 'Caimán del Amazonas', ci: 'Melanosuchus niger',
         est: 'Vulnerable',
         desc: 'Habita los ríos y lagunas de la cuenca amazónica. Es el predador que mantiene el equilibrio del agua. Sin él, las poblaciones de peces se descontrolan y el ecosistema colapsa. Su presencia es señal de que el río está sano.',
-        glb: 'CAIMAN.glb',
+        glb: 'https://andresdelgadov-star.github.io/SUBSUELO-1/CAIMAN.glb',
         ejemplares: 'Población en recuperación pero altamente vulnerable.', videoUrl: 'https://andresdelgadov-star.github.io/SUBSUELO-1/CAIMAN.mp4', bg: '#001008'
       },
     ],
@@ -1230,7 +1254,7 @@ function animarHero(){
 /* ════════════════════════════════════
    LÓGICA DE ZONAS
 ════════════════════════════════════ */
-let actual = null, slideIdx = 0, totalSlides = 0, firmas = 1247;
+let actual = null, modoEscena = 'hoy', slideIdx = 0, totalSlides = 0, firmas = 1247;
 
 /* Nombres cortos para los botones */
 const ZONA_NOMBRES = {
@@ -1247,27 +1271,51 @@ function buildNavZonas(actualId){
   TODAS_ZONAS.forEach(id => {
     const btn = document.createElement('button');
     btn.className = 'visor-zona-btn' + (id === actualId ? ' active-zona' : '');
-    btn.setAttribute('aria-label', id === actualId ? `Zona actual: ${ZONA_NOMBRES[id]}` : `Ir a Zona ${ZONA_NUMS[id]}: ${ZONA_NOMBRES[id]}`);
-    btn.innerHTML = `<span class="visor-zona-num">Zona ${ZONA_NUMS[id]}</span>`;
+    btn.setAttribute('aria-label', id === actualId ? `Mapa actual: ${ZONA_NOMBRES[id]}` : `Ir a ${ZONA_NOMBRES[id]}`);
+    btn.textContent = id === actualId ? ZONA_NOMBRES[id] : `Ir a ${ZONA_NOMBRES[id]}`;
     btn.onclick = id === actualId ? null : () => cambiarZonaVisor(id);
     btn.disabled = id === actualId;
     nav.appendChild(btn);
   });
 }
 
+function buildEscenaMapNav(actualId){
+  const nav = document.getElementById('escena-map-nav');
+  nav.innerHTML = '';
+  const btn = document.createElement('button');
+  btn.className = 'escena-map-btn';
+  btn.type = 'button';
+  const viendoFracking = modoEscena === 'fracking';
+  btn.setAttribute('aria-label', viendoFracking ? `Volver al panorama actual de ${ZONA_NOMBRES[actualId]}` : `Ver efectos del fracking en ${ZONA_NOMBRES[actualId]}`);
+  btn.textContent = viendoFracking ? 'Volver' : 'Ver efectos fracking';
+  btn.onclick = () => cambiarModoEscena(viendoFracking ? 'hoy' : 'fracking');
+  nav.appendChild(btn);
+}
+
+function cambiarModoEscena(modo){
+  if(!actual) return;
+  modoEscena = modo;
+  cargarEscena(actual);
+  buildEscenaMapNav(actual);
+  document.getElementById('escena-chip').textContent = modoEscena === 'fracking'
+    ? 'Panorama 360° — efectos del fracking'
+    : 'Panorama 360° — territorio actual';
+}
+
 function cambiarZonaVisor(id){
   // Cambiar zona sin volver al mapa
   actual = id;
+  modoEscena = 'hoy';
   const z = ZONAS[id];
   document.getElementById('visor-label').textContent  = z.label;
   buildNavZonas(id);
+  buildEscenaMapNav(id);
   document.getElementById('visor-coords').textContent = z.coords;
   document.querySelectorAll('.zona-card').forEach(c => c.classList.remove('active'));
   document.getElementById('zc-'+id).classList.add('active');
   document.querySelectorAll('.zona-trigger').forEach(g => g.classList.remove('active'));
   document.getElementById('zt-'+id).classList.add('active');
   cargarEscena(id);
-  buildNavZonas(id);
   buildFauna(z.fauna);
   buildSlider(z.slides);
   document.getElementById('cta-title').textContent = z.ctaTitulo;
@@ -1283,6 +1331,7 @@ function cambiarZonaVisor(id){
 
 function abrirZona(id){
   actual = id;
+  modoEscena = 'hoy';
   const z = ZONAS[id];
 
   // Activar estados
@@ -1294,7 +1343,9 @@ function abrirZona(id){
   // Visor
   document.getElementById('visor-label').textContent  = z.label;
   document.getElementById('visor-coords').textContent = z.coords;
-  document.getElementById('escena-chip').textContent  = 'Panorama 360° — usa las miniaturas para cambiar de escena';
+  document.getElementById('escena-chip').textContent  = 'Panorama 360° — territorio actual';
+  buildNavZonas(id);
+  buildEscenaMapNav(id);
   cargarEscena(id);
   document.getElementById('s-visor').classList.add('visible');
 
@@ -1335,7 +1386,9 @@ function cerrar(){
   });
   document.querySelectorAll('.zona-card, .zona-trigger').forEach(el => el.classList.remove('active'));
   document.getElementById('escena-inner').innerHTML = '';
+  document.getElementById('escena-map-nav').innerHTML = '';
   actual = null;
+  modoEscena = 'hoy';
   document.getElementById('s-mapa').scrollIntoView({ behavior:'smooth' });
 }
 
@@ -1356,12 +1409,12 @@ function cargarEscena(id){
   fill.style.animation = 'loadBar 1s ease forwards';
 
   const iframe = document.createElement('iframe');
-  iframe.src = ZONAS[id].kuula;
+  iframe.src = modoEscena === 'fracking' ? ZONAS[id].kuulaFracking : ZONAS[id].kuula;
   iframe.setAttribute('frameborder','0');
   iframe.setAttribute('allow','xr-spatial-tracking; gyroscope; accelerometer');
   iframe.setAttribute('allowfullscreen','');
   iframe.setAttribute('scrolling','no');
-  iframe.setAttribute('title', `Panorama 360° de ${ZONAS[id].label}`);
+  iframe.setAttribute('title', `${modoEscena === 'fracking' ? 'Efectos del fracking' : 'Panorama actual'} — ${ZONAS[id].label}`);
   iframe.style.cssText = 'width:100%;height:100%;border:none;display:block;opacity:0;transition:opacity .5s ease;';
 
   iframe.onload = ()=>{
@@ -1502,17 +1555,22 @@ function abrirModal(nom, ci, est, desc, glb, videoUrl, ejemplares){
   const video      = document.getElementById('modal-video');
   const videoInfo  = document.getElementById('modal-video-info');
   const fullInfo   = document.getElementById('modal-full-info');
+  const media      = document.getElementById('modal-media');
 
   // Ocultar todo
   videoWrap.style.display = 'none';
   d3Wrap.style.display    = 'none';
   ph.style.display        = 'none';
+  media.classList.remove('video-mode');
+  media.style.height = '260px';
   video.src = '';
 
   if(videoUrl && videoUrl !== ''){
     // MODO VIDEO — solo video + dato ejemplares
     video.src = videoUrl;
     videoWrap.style.display = 'block';
+    media.classList.add('video-mode');
+    media.style.height = '';
     // Info simplificada
     document.getElementById('modal-nombre-v').textContent    = nom;
     document.getElementById('modal-cientifico-v').textContent = ci;
@@ -1520,13 +1578,10 @@ function abrirModal(nom, ci, est, desc, glb, videoUrl, ejemplares){
     document.getElementById('modal-ej-val').textContent      = ejemplares || 'Datos en actualización.';
     videoInfo.style.display = 'block';
     fullInfo.style.display  = 'none';
-    // Hacer el modal más alto para el video
-    document.getElementById('modal-media').style.height = '55vmin';
   } else {
     // MODO 3D o PLACEHOLDER — info completa
     videoInfo.style.display = 'none';
     fullInfo.style.display  = 'block';
-    document.getElementById('modal-media').style.height = '260px';
     document.getElementById('modal-nombre').textContent     = nom;
     document.getElementById('modal-cientifico').textContent = ci;
     document.getElementById('modal-estado').textContent     = est;
