@@ -912,12 +912,18 @@ footer { padding:2.5rem 2rem; text-align:center; border-top:1px solid var(--n3);
       <div class="escena-hint" id="escena-hint">Arrastra para explorar el entorno →</div>
       <div class="escena-inner" id="escena-inner"></div>
     </div>
-    <!-- Indicador elegante de scroll -->
-    <div class="scroll-down-bar" onclick="document.getElementById('s-fauna').scrollIntoView({behavior:'smooth'})"
-         role="button" aria-label="Ver fauna y datos">
-      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <path d="M4 7L9 12L14 7" stroke="#E85D04" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
+    <!-- Botón ver fauna y datos -->
+    <div style="display:flex;justify-content:center;padding:1.5rem;background:var(--n2);border-bottom:1px solid var(--n3);">
+      <button onclick="document.getElementById('s-fauna').scrollIntoView({behavior:'smooth'})"
+              style="display:flex;align-items:center;gap:.6rem;padding:.7rem 1.75rem;background:var(--o);color:#000;border:none;font-family:Inter,sans-serif;font-size:.58rem;font-weight:700;letter-spacing:.25em;text-transform:uppercase;cursor:pointer;transition:background .2s,transform .15s;"
+              onmouseover="this.style.background='#FF6B1A';this.style.transform='translateY(-1px)'"
+              onmouseout="this.style.background='#E85D04';this.style.transform='none'"
+              aria-label="Ver fauna y datos de esta zona">
+        Ver fauna y datos
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M3 5.5L7 9.5L11 5.5" stroke="#000" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
     </div>
   </section>
 
@@ -1041,15 +1047,34 @@ footer { padding:2.5rem 2rem; text-align:center; border-top:1px solid var(--n3);
         <div class="fauna-ph-label">Video · Modelo 3D<br><span style="color:var(--o);opacity:.4;font-size:.38rem;">PRÓXIMAMENTE</span></div>
       </div>
     </div>
-    <div class="modal-estado" id="modal-estado">—</div>
-    <h3 class="modal-nombre" id="modal-nombre">—</h3>
-    <p class="modal-cientifico" id="modal-cientifico">—</p>
-    <!-- Ejemplares en Colombia — dato prominente -->
-    <div class="modal-ejemplares-box" id="modal-ejemplares-box" style="display:none;">
-      <span class="modal-ej-label">Ejemplares en Colombia</span>
-      <span class="modal-ej-val" id="modal-ejemplares">—</span>
+    <!-- Info modo video (solo cuando hay video) -->
+    <div id="modal-video-info" style="display:none;">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.75rem;margin-bottom:.75rem;">
+        <div>
+          <h3 class="modal-nombre" id="modal-nombre-v">—</h3>
+          <p class="modal-cientifico" id="modal-cientifico-v">—</p>
+        </div>
+        <div class="modal-estado" id="modal-estado-v">—</div>
+      </div>
+      <!-- Dato de ejemplares estilo card -->
+      <div style="background:rgba(232,93,4,.08);border:1px solid rgba(232,93,4,.25);padding:.85rem 1rem;display:flex;align-items:center;gap:1rem;">
+        <div>
+          <div style="font-size:.48rem;letter-spacing:.28em;text-transform:uppercase;color:var(--o);margin-bottom:.2rem;">Ejemplares en Colombia</div>
+          <div style="font-size:.88rem;font-weight:500;color:var(--b);line-height:1.5;" id="modal-ej-val">—</div>
+        </div>
+      </div>
     </div>
-    <p class="modal-texto" id="modal-texto">—</p>
+    <!-- Info modo 3D / sin video -->
+    <div id="modal-full-info" style="display:none;">
+      <div class="modal-estado" id="modal-estado">—</div>
+      <h3 class="modal-nombre" id="modal-nombre">—</h3>
+      <p class="modal-cientifico" id="modal-cientifico">—</p>
+      <div class="modal-ejemplares-box" id="modal-ejemplares-box" style="display:none;">
+        <span class="modal-ej-label">Ejemplares en Colombia</span>
+        <span class="modal-ej-val" id="modal-ejemplares">—</span>
+      </div>
+      <p class="modal-texto" id="modal-texto">—</p>
+    </div>
   </div>
 </div>
 
@@ -1067,14 +1092,14 @@ const ZONAS = {
         nom: 'Manatí Antillano', ci: 'Trichechus manatus',
         est: 'En peligro crítico',
         desc: 'Vive en las ciénagas y caños del río Magdalena. Respira aire pero pasa su vida bajo el agua, entre raíces y plantas acuáticas. Necesita agua limpia, quieta y cálida. Cuando el agua se contamina, no tiene a dónde ir.',
-        glb: 'manati.glb',
+        glb: 'MANATI.glb',
         ejemplares: 'Menos de 1.000 individuos estimados en Colombia.', videoUrl: 'https://andresdelgadov-star.github.io/SUBSUELO-1/MANATI.mp4', bg: '#0d1a0a'
       },
       {
         nom: 'Jaguar Americano', ci: 'Panthera onca',
         est: 'Vulnerable',
         desc: 'Recorre cientos de kilómetros de selva densa, ciénagas y ríos. El Magdalena Medio es uno de sus últimos corredores vivos en Colombia. Caza, duerme y se mueve en silencio entre la vegetación. Un territorio fracturado es un jaguar sin camino.',
-        glb: 'jaguar.glb',
+        glb: 'JAGUAR.glb',
         ejemplares: 'Entre 800 y 1.200 jaguares quedan en Colombia.', videoUrl: 'https://andresdelgadov-star.github.io/SUBSUELO-1/JAGUAR.mp4', bg: '#1a1200'
       },
     ],
@@ -1096,14 +1121,14 @@ const ZONAS = {
         nom: 'Danta o Tapir Amazónico', ci: 'Tapirus terrestris',
         est: 'Vulnerable',
         desc: 'Camina lento por el bosque húmedo del Catatumbo, come frutas y dispersa semillas que regeneran la selva. Es el jardinero del ecosistema. Donde hay danta, hay bosque vivo. Donde desaparece, el bosque empieza a morir.',
-        glb: 'danta.glb',
+        glb: 'DANTA.glb',
         ejemplares: 'Menos de 500 dantas en el Catatumbo colombiano.', videoUrl: 'https://andresdelgadov-star.github.io/SUBSUELO-1/DANTA.mp4', bg: '#0a1200'
       },
       {
         nom: 'Mono Araña del Norte', ci: 'Ateles hybridus',
         est: 'En peligro crítico',
         desc: 'Vive en lo alto del dosel del bosque, entre las ramas más altas del Catatumbo. Se mueve en familia, come frutas maduras y las dispersa por toda la selva. El pueblo Barí lo conoce desde siempre. Es parte del mismo territorio que quieren proteger.',
-        glb: 'mono arana.glb',
+        glb: 'MONOARANA.glb',
         ejemplares: 'Población crítica: menos de 300 individuos en Colombia.', videoUrl: 'https://andresdelgadov-star.github.io/SUBSUELO-1/MONOARANA.mp4', bg: '#100a00'
       },
     ],
@@ -1125,14 +1150,14 @@ const ZONAS = {
         nom: 'Tortuga Amazónica', ci: 'Podocnemis expansa',
         est: 'Vulnerable',
         desc: 'Nace en las playas del río Mocoa, crece en sus aguas y regresa al mismo lugar décadas después. Lleva millones de años en la Amazonía. No necesita nada que el río no le dé. Solo necesita que el río siga limpio.',
-        glb: 'tortuga.glb',
+        glb: 'TORTUGA.glb',
         ejemplares: 'Colonias reproductoras en colapso en el Putumayo.', videoUrl: 'https://andresdelgadov-star.github.io/SUBSUELO-1/TORTUGA.mp4', bg: '#001a0a'
       },
       {
         nom: 'Caimán del Amazonas', ci: 'Melanosuchus niger',
         est: 'Vulnerable',
         desc: 'Habita los ríos y lagunas de la cuenca amazónica. Es el predador que mantiene el equilibrio del agua. Sin él, las poblaciones de peces se descontrolan y el ecosistema colapsa. Su presencia es señal de que el río está sano.',
-        glb: 'caiman.glb',
+        glb: 'CAIMAN.glb',
         ejemplares: 'Población en recuperación pero altamente vulnerable.', videoUrl: 'https://andresdelgadov-star.github.io/SUBSUELO-1/CAIMAN.mp4', bg: '#001008'
       },
     ],
@@ -1461,35 +1486,55 @@ function slideNav(dir){
    MODAL
 ════════════════════════════════════ */
 function abrirModal(nom, ci, est, desc, glb, videoUrl, ejemplares){
-  document.getElementById('modal-nombre').textContent     = nom;
-  document.getElementById('modal-cientifico').textContent = ci;
-  document.getElementById('modal-estado').textContent     = est;
-  document.getElementById('modal-texto').textContent      = desc;
+  const videoWrap  = document.getElementById('modal-video-wrap');
+  const d3Wrap     = document.getElementById('modal-3d-wrap');
+  const ph         = document.getElementById('modal-ph');
+  const mv         = document.getElementById('modal-mv');
+  const video      = document.getElementById('modal-video');
+  const videoInfo  = document.getElementById('modal-video-info');
+  const fullInfo   = document.getElementById('modal-full-info');
 
-  const videoWrap = document.getElementById('modal-video-wrap');
-  const d3Wrap    = document.getElementById('modal-3d-wrap');
-  const ph        = document.getElementById('modal-ph');
-  const mv        = document.getElementById('modal-mv');
-  const iframe    = document.getElementById('modal-video');
-
-  // Ocultar todo primero
+  // Ocultar todo
   videoWrap.style.display = 'none';
   d3Wrap.style.display    = 'none';
   ph.style.display        = 'none';
-  iframe.src = '';
+  video.src = '';
 
   if(videoUrl && videoUrl !== ''){
-    // Mostrar video YouTube
-    iframe.src = videoUrl;
+    // MODO VIDEO — solo video + dato ejemplares
+    video.src = videoUrl;
     videoWrap.style.display = 'block';
-  } else if(glb && glb !== ''){
-    // Mostrar modelo 3D
-    mv.setAttribute('src', glb);
-    mv.setAttribute('alt', `Modelo 3D de ${nom}`);
-    d3Wrap.style.display = 'block';
+    // Info simplificada
+    document.getElementById('modal-nombre-v').textContent    = nom;
+    document.getElementById('modal-cientifico-v').textContent = ci;
+    document.getElementById('modal-estado-v').textContent    = est;
+    document.getElementById('modal-ej-val').textContent      = ejemplares || 'Datos en actualización.';
+    videoInfo.style.display = 'block';
+    fullInfo.style.display  = 'none';
+    // Hacer el modal más alto para el video
+    document.getElementById('modal-media').style.height = '55vmin';
   } else {
-    // Placeholder
-    ph.style.display = 'flex';
+    // MODO 3D o PLACEHOLDER — info completa
+    videoInfo.style.display = 'none';
+    fullInfo.style.display  = 'block';
+    document.getElementById('modal-media').style.height = '260px';
+    document.getElementById('modal-nombre').textContent     = nom;
+    document.getElementById('modal-cientifico').textContent = ci;
+    document.getElementById('modal-estado').textContent     = est;
+    document.getElementById('modal-texto').textContent      = desc;
+    const ejEl  = document.getElementById('modal-ejemplares');
+    const ejBox = document.getElementById('modal-ejemplares-box');
+    if(ejEl && ejBox){
+      ejEl.textContent    = ejemplares || '';
+      ejBox.style.display = ejemplares ? 'flex' : 'none';
+    }
+    if(glb && glb !== ''){
+      mv.setAttribute('src', glb);
+      mv.setAttribute('alt', `Modelo 3D de ${nom}`);
+      d3Wrap.style.display = 'block';
+    } else {
+      ph.style.display = 'flex';
+    }
   }
 
   document.getElementById('modal').classList.add('open');
