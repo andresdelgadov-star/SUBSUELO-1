@@ -236,7 +236,7 @@ nav.scrolled { padding:.8rem 2.5rem; }
 }
 
 .hero-scroll { margin-top:3.5rem; display:flex; flex-direction:column; align-items:center; gap:.75rem; cursor:pointer; }
-.hero-scroll-label { font-size:var(--fs-xs); letter-spacing:.32em; text-transform:uppercase; color:var(--o); }
+.hero-scroll-label { font-size:var(--fs-xs); letter-spacing:.32em; text-transform:uppercase; color:var(--o); font-weight:600; }
 .hero-scroll-line { width:1px; height:48px; background:linear-gradient(to bottom,var(--o),transparent); animation:scrollLine 1.8s ease-in-out infinite; }
 @keyframes scrollLine { 0%,100%{opacity:1;transform:scaleY(1);} 50%{opacity:.25;transform:scaleY(.4);} }
 
@@ -282,7 +282,7 @@ nav.scrolled { padding:.8rem 2.5rem; }
   transform-origin:center; transform-box:fill-box;
   animation:ring 2.5s ease-out infinite;
 }
-@keyframes ring { 0%{r:10;opacity:.7;} 100%{r:26;opacity:0;} }
+@keyframes ring { 0%{r:20;opacity:.7;} 100%{r:52;opacity:0;} }
 .zona-ring-2 { animation-delay:.8s; }
 .zona-dot { fill:var(--o); stroke:var(--n); stroke-width:1.5; transition:r var(--t-mid),filter var(--t-mid); }
 .zona-trigger:hover .zona-dot { r:10; filter:drop-shadow(0 0 6px rgba(232,93,4,.8)); }
@@ -346,15 +346,36 @@ nav.scrolled { padding:.8rem 2.5rem; }
   padding:1rem 2rem; background:rgba(7,7,7,.96);
   backdrop-filter:blur(20px); border-bottom:1px solid var(--n3); flex-wrap:wrap;
 }
+/* Navegación entre zonas */
+.visor-nav-zonas {
+  display:flex; gap:.5rem; flex-shrink:0;
+}
+.visor-zona-btn {
+  display:flex; align-items:center; gap:.45rem;
+  font-size:var(--fs-xs); font-weight:700; letter-spacing:.15em; text-transform:uppercase;
+  color:#000; background:var(--o); border:none;
+  padding:.5rem 1.1rem;
+  transition:background var(--t-fast), transform var(--t-fast), box-shadow var(--t-fast);
+}
+.visor-zona-btn:hover { background:var(--o2); transform:translateY(-1px); box-shadow:0 4px 12px rgba(232,93,4,.35); }
+.visor-zona-btn:active { transform:translateY(0); }
+.visor-zona-btn.active-zona { background:var(--o3); box-shadow:0 0 0 2px var(--o); }
+.visor-zona-btn:focus-visible { outline:2px solid var(--w); outline-offset:2px; }
+.visor-zona-num {
+  font-family:'Bebas Neue',sans-serif; font-size:1rem;
+  color:#000; line-height:1; flex-shrink:0;
+}
 .visor-back {
   display:flex; align-items:center; gap:.45rem;
   font-size:var(--fs-xs); letter-spacing:.2em; text-transform:uppercase;
-  color:var(--b3); background:none; border:1px solid transparent; padding:.35rem .75rem;
-  transition:color var(--t-fast),border-color var(--t-fast),background var(--t-fast);
+  color:#000; background:var(--o); border:none; padding:.45rem .9rem;
+  font-weight:700;
+  transition:background var(--t-fast), transform var(--t-fast), box-shadow var(--t-fast);
 }
-.visor-back:hover { color:var(--b); border-color:var(--n5); background:var(--n2); }
+.visor-back:hover { background:var(--o2); transform:translateY(-1px); box-shadow:0 4px 12px rgba(232,93,4,.3); }
+.visor-back:active { transform:translateY(0); }
 .visor-back:focus-visible { outline:2px solid var(--o); outline-offset:2px; }
-.visor-back svg { width:14px; height:14px; transition:transform var(--t-fast); }
+.visor-back svg { width:14px; height:14px; stroke:#000; transition:transform var(--t-fast); }
 .visor-back:hover svg { transform:translateX(-2px); }
 .visor-divider { width:1px; height:20px; background:var(--n5); flex-shrink:0; }
 .visor-meta { flex:1; min-width:0; }
@@ -371,7 +392,7 @@ nav.scrolled { padding:.8rem 2.5rem; }
 .visor-compass svg { width:28px; height:28px; opacity:.45; animation:compassWobble 6s ease-in-out infinite; }
 @keyframes compassWobble { 0%,100%{transform:rotate(0deg);} 25%{transform:rotate(8deg);} 75%{transform:rotate(-8deg);} }
 
-.escena-wrap { position:relative; width:100%; height:70vh; min-height:480px; background:#020202; overflow:hidden; }
+.escena-wrap { position:relative; width:100%; height:80vh; min-height:560px; background:#020202; overflow:hidden; }
 .escena-inner { width:100%; height:100%; }
 .escena-loader {
   position:absolute; inset:0; z-index:20; background:var(--n2);
@@ -465,11 +486,13 @@ nav.scrolled { padding:.8rem 2.5rem; }
   max-width:32ch; margin:0 auto;
 }
 .fauna-btn {
-  font-size:var(--fs-xs); letter-spacing:.2em; text-transform:uppercase;
-  color:var(--b3); border:1px solid var(--n4); padding:.45rem 1.1rem;
-  background:none; transition:border-color var(--t-fast),color var(--t-fast),background var(--t-fast),transform var(--t-fast);
+  font-size:var(--fs-xs); font-weight:700; letter-spacing:.2em; text-transform:uppercase;
+  color:#000; border:none; padding:.6rem 1.35rem;
+  background:var(--o); transition:background var(--t-fast), transform var(--t-fast), box-shadow var(--t-fast);
+  width:100%; margin-top:auto;
 }
-.fauna-btn:hover { border-color:var(--o); color:var(--o); background:rgba(232,93,4,.06); transform:translateY(-1px); }
+.fauna-btn:hover { background:var(--o2); transform:translateY(-1px); box-shadow:0 4px 12px rgba(232,93,4,.3); }
+.fauna-btn:active { transform:translateY(0); }
 .fauna-btn:focus-visible { outline:2px solid var(--o); outline-offset:3px; }
 
 /* ═══════════════════════════════════════════
@@ -756,45 +779,45 @@ footer { padding:2.5rem 2rem; text-align:center; border-top:1px solid var(--n3);
         <img src="https://andresdelgadov-star.github.io/SUBSUELO-1/MAPA.svg" alt="Mapa de Colombia"
              style="width:100%;height:auto;display:block;"
              draggable="false" aria-hidden="true">
-        <!-- Hotspots interactivos superpuestos -->
-        <svg viewBox="0 0 300 430" xmlns="http://www.w3.org/2000/svg"
+        <!-- Hotspots con coordenadas calibradas al viewBox real 642.62 x 886.45 -->
+        <svg viewBox="0 0 642.62 886.45" xmlns="http://www.w3.org/2000/svg"
              style="position:absolute;inset:0;width:100%;height:100%;overflow:visible;"
              aria-hidden="true">
 
-          <!-- Zona 1 — Magdalena Medio -->
+          <!-- Zona 1 — Magdalena Medio (Barrancabermeja 7.07°N 73.85°O) -->
           <g class="zona-trigger" id="zt-magdalena" onclick="abrirZona('magdalena')"
              role="button" tabindex="0" aria-label="Explorar Zona 1: Ciénaga de Chucurí, Santander"
              onkeydown="if(event.key==='Enter')abrirZona('magdalena')">
-            <circle class="zona-ring" cx="159" cy="140" r="10" style="animation-delay:0s"/>
-            <circle class="zona-ring zona-ring-2" cx="159" cy="140" r="10" style="animation-delay:.8s"/>
-            <circle class="zona-dot" cx="159" cy="140" r="8"/>
-            <text class="zona-num" x="159" y="140">1</text>
-            <text class="zona-lbl" x="170" y="136">Magdalena</text>
-            <text class="zona-lbl" x="170" y="145">Medio</text>
+            <circle class="zona-ring" cx="340.8" cy="288.2" r="20" style="animation-delay:0s"/>
+            <circle class="zona-ring zona-ring-2" cx="340.8" cy="288.2" r="20" style="animation-delay:.8s"/>
+            <circle class="zona-dot" cx="340.8" cy="288.2" r="16"/>
+            <text class="zona-num" x="340.8" y="288.2" style="font-size:14px;">1</text>
+            <text class="zona-lbl" x="360" y="281" style="font-size:12px;">Magdalena</text>
+            <text class="zona-lbl" x="360" y="296" style="font-size:12px;">Medio</text>
           </g>
 
-          <!-- Zona 2 — Catatumbo -->
+          <!-- Zona 2 — Catatumbo (Tibú 8.66°N 72.73°O) -->
           <g class="zona-trigger" id="zt-catatumbo" onclick="abrirZona('catatumbo')"
              role="button" tabindex="0" aria-label="Explorar Zona 2: Río Catatumbo, Norte de Santander"
              onkeydown="if(event.key==='Enter')abrirZona('catatumbo')">
-            <circle class="zona-ring" cx="182" cy="99" r="10" style="animation-delay:.9s"/>
-            <circle class="zona-ring zona-ring-2" cx="182" cy="99" r="10" style="animation-delay:1.7s"/>
-            <circle class="zona-dot" cx="182" cy="99" r="8"/>
-            <text class="zona-num" x="182" y="99">2</text>
-            <text class="zona-lbl" x="167" y="93" style="text-anchor:end;">Catatumbo</text>
-            <text class="zona-lbl" x="167" y="102" style="text-anchor:end;">N. Santander</text>
+            <circle class="zona-ring" cx="389.5" cy="203.8" r="20" style="animation-delay:.9s"/>
+            <circle class="zona-ring zona-ring-2" cx="389.5" cy="203.8" r="20" style="animation-delay:1.7s"/>
+            <circle class="zona-dot" cx="389.5" cy="203.8" r="16"/>
+            <text class="zona-num" x="389.5" y="203.8" style="font-size:14px;">2</text>
+            <text class="zona-lbl" x="368" y="196" style="font-size:12px;text-anchor:end;">Catatumbo</text>
+            <text class="zona-lbl" x="368" y="211" style="font-size:12px;text-anchor:end;">N. Santander</text>
           </g>
 
-          <!-- Zona 3 — Putumayo -->
+          <!-- Zona 3 — Putumayo (Puerto Asís 0.5°N 76.5°O) -->
           <g class="zona-trigger" id="zt-putumayo" onclick="abrirZona('putumayo')"
              role="button" tabindex="0" aria-label="Explorar Zona 3: Río Mocoa, Putumayo"
              onkeydown="if(event.key==='Enter')abrirZona('putumayo')">
-            <circle class="zona-ring" cx="105" cy="309" r="10" style="animation-delay:1.8s"/>
-            <circle class="zona-ring zona-ring-2" cx="105" cy="309" r="10" style="animation-delay:2.6s"/>
-            <circle class="zona-dot" cx="105" cy="309" r="8"/>
-            <text class="zona-num" x="105" y="309">3</text>
-            <text class="zona-lbl" x="116" y="305">Putumayo</text>
-            <text class="zona-lbl" x="116" y="314">Amazonía</text>
+            <circle class="zona-ring" cx="225.8" cy="637.0" r="20" style="animation-delay:1.8s"/>
+            <circle class="zona-ring zona-ring-2" cx="225.8" cy="637.0" r="20" style="animation-delay:2.6s"/>
+            <circle class="zona-dot" cx="225.8" cy="637.0" r="16"/>
+            <text class="zona-num" x="225.8" y="637.0" style="font-size:14px;">3</text>
+            <text class="zona-lbl" x="245" y="630" style="font-size:12px;">Putumayo</text>
+            <text class="zona-lbl" x="245" y="645" style="font-size:12px;">Amazonía</text>
           </g>
         </svg>
       </div>
@@ -839,17 +862,25 @@ footer { padding:2.5rem 2rem; text-align:center; border-top:1px solid var(--n3);
   <!-- VISOR 360 -->
   <section id="s-visor" aria-labelledby="visor-label">
     <div class="visor-topbar">
+      <!-- Volver al mapa -->
       <button class="visor-back" onclick="cerrar()" aria-label="Volver al mapa de territorios">
         <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
           <path d="M10 12L6 8L10 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
         </svg>
-        Volver al mapa
+        Mapa
       </button>
       <div class="visor-divider" aria-hidden="true"></div>
+      <!-- Nombre y coordenadas -->
       <div class="visor-meta">
         <span class="visor-zona-label" id="visor-label" aria-live="polite">—</span>
         <span class="visor-coords" id="visor-coords" aria-live="polite">—</span>
       </div>
+      <!-- Navegación entre zonas -->
+      <div class="visor-nav-zonas" id="visor-nav-zonas" role="group" aria-label="Explorar otras zonas">
+        <!-- Se genera dinámicamente por JS -->
+      </div>
+      <div class="visor-divider" aria-hidden="true"></div>
+      <!-- Badge 360 -->
       <div class="visor-badge360" aria-label="Panorama 360 grados interactivo">
         <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
           <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.2"/>
@@ -858,7 +889,7 @@ footer { padding:2.5rem 2rem; text-align:center; border-top:1px solid var(--n3);
         </svg>
         Panorama 360°
       </div>
-      <div class="visor-compass" aria-hidden="true" title="Gira la imagen arrastrando con el mouse o el dedo">
+      <div class="visor-compass" aria-hidden="true" title="Gira la imagen arrastrando">
         <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
           <circle cx="16" cy="16" r="14" stroke="currentColor" stroke-width=".8" opacity=".4"/>
           <path d="M16 4L18 14H14L16 4Z" fill="#E85D04"/>
@@ -880,6 +911,13 @@ footer { padding:2.5rem 2rem; text-align:center; border-top:1px solid var(--n3);
       </div>
       <div class="escena-hint" id="escena-hint">Arrastra para explorar el entorno →</div>
       <div class="escena-inner" id="escena-inner"></div>
+    </div>
+    <!-- Indicador elegante de scroll -->
+    <div class="scroll-down-bar" onclick="document.getElementById('s-fauna').scrollIntoView({behavior:'smooth'})"
+         role="button" aria-label="Ver fauna y datos">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M4 7L9 12L14 7" stroke="#E85D04" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
     </div>
   </section>
 
@@ -965,7 +1003,7 @@ footer { padding:2.5rem 2rem; text-align:center; border-top:1px solid var(--n3);
 
   <footer role="contentinfo">
     <div class="footer-txt">
-      <span>SUBSUELO</span> — Proyecto educativo sobre el fracking en Colombia · 2025<br>
+      <span>SUBSUELO</span> — Proyecto educativo sobre el fracking en Colombia · 2026<br>
       Fuentes: Ministerio de Ambiente · Censat Agua Viva · WWF Colombia · Parques Nacionales Naturales
     </div>
   </footer>
@@ -980,7 +1018,7 @@ footer { padding:2.5rem 2rem; text-align:center; border-top:1px solid var(--n3);
     <div class="modal-media" id="modal-media" aria-label="Animal en su hábitat natural">
       <!-- Video YouTube (cuando esté disponible) -->
       <div id="modal-video-wrap" style="display:none;width:100%;height:100%;position:relative;">
-        <video id="modal-video" controls autoplay muted playsinline
+        <video id="modal-video" controls autoplay playsinline
           style="width:100%;height:100%;object-fit:cover;background:#000;">
           Tu navegador no soporta video HTML5.
         </video>
@@ -1006,6 +1044,11 @@ footer { padding:2.5rem 2rem; text-align:center; border-top:1px solid var(--n3);
     <div class="modal-estado" id="modal-estado">—</div>
     <h3 class="modal-nombre" id="modal-nombre">—</h3>
     <p class="modal-cientifico" id="modal-cientifico">—</p>
+    <!-- Ejemplares en Colombia — dato prominente -->
+    <div class="modal-ejemplares-box" id="modal-ejemplares-box" style="display:none;">
+      <span class="modal-ej-label">Ejemplares en Colombia</span>
+      <span class="modal-ej-val" id="modal-ejemplares">—</span>
+    </div>
     <p class="modal-texto" id="modal-texto">—</p>
   </div>
 </div>
@@ -1024,13 +1067,15 @@ const ZONAS = {
         nom: 'Manatí Antillano', ci: 'Trichechus manatus',
         est: 'En peligro crítico',
         desc: 'Vive en las ciénagas y caños del río Magdalena. Respira aire pero pasa su vida bajo el agua, entre raíces y plantas acuáticas. Necesita agua limpia, quieta y cálida. Cuando el agua se contamina, no tiene a dónde ir.',
-        glb: 'manati.glb', videoUrl: 'https://andresdelgadov-star.github.io/SUBSUELO-1/MANATI.mp4', bg: '#0d1a0a'
+        glb: 'manati.glb',
+        ejemplares: 'Menos de 1.000 individuos estimados en Colombia.', videoUrl: 'https://andresdelgadov-star.github.io/SUBSUELO-1/MANATI.mp4', bg: '#0d1a0a'
       },
       {
         nom: 'Jaguar Americano', ci: 'Panthera onca',
         est: 'Vulnerable',
         desc: 'Recorre cientos de kilómetros de selva densa, ciénagas y ríos. El Magdalena Medio es uno de sus últimos corredores vivos en Colombia. Caza, duerme y se mueve en silencio entre la vegetación. Un territorio fracturado es un jaguar sin camino.',
-        glb: 'jaguar.glb', videoUrl: 'https://andresdelgadov-star.github.io/SUBSUELO-1/JAGUAR.mp4', bg: '#1a1200'
+        glb: 'jaguar.glb',
+        ejemplares: 'Entre 800 y 1.200 jaguares quedan en Colombia.', videoUrl: 'https://andresdelgadov-star.github.io/SUBSUELO-1/JAGUAR.mp4', bg: '#1a1200'
       },
     ],
     slides: [
@@ -1051,13 +1096,15 @@ const ZONAS = {
         nom: 'Danta o Tapir Amazónico', ci: 'Tapirus terrestris',
         est: 'Vulnerable',
         desc: 'Camina lento por el bosque húmedo del Catatumbo, come frutas y dispersa semillas que regeneran la selva. Es el jardinero del ecosistema. Donde hay danta, hay bosque vivo. Donde desaparece, el bosque empieza a morir.',
-        glb: 'danta.glb', videoUrl: 'https://andresdelgadov-star.github.io/SUBSUELO-1/DANTA.mp4', bg: '#0a1200'
+        glb: 'danta.glb',
+        ejemplares: 'Menos de 500 dantas en el Catatumbo colombiano.', videoUrl: 'https://andresdelgadov-star.github.io/SUBSUELO-1/DANTA.mp4', bg: '#0a1200'
       },
       {
         nom: 'Mono Araña del Norte', ci: 'Ateles hybridus',
         est: 'En peligro crítico',
         desc: 'Vive en lo alto del dosel del bosque, entre las ramas más altas del Catatumbo. Se mueve en familia, come frutas maduras y las dispersa por toda la selva. El pueblo Barí lo conoce desde siempre. Es parte del mismo territorio que quieren proteger.',
-        glb: 'mono arana.glb', videoUrl: 'https://andresdelgadov-star.github.io/SUBSUELO-1/MONOARANA.mp4', bg: '#100a00'
+        glb: 'mono arana.glb',
+        ejemplares: 'Población crítica: menos de 300 individuos en Colombia.', videoUrl: 'https://andresdelgadov-star.github.io/SUBSUELO-1/MONOARANA.mp4', bg: '#100a00'
       },
     ],
     slides: [
@@ -1078,13 +1125,15 @@ const ZONAS = {
         nom: 'Tortuga Amazónica', ci: 'Podocnemis expansa',
         est: 'Vulnerable',
         desc: 'Nace en las playas del río Mocoa, crece en sus aguas y regresa al mismo lugar décadas después. Lleva millones de años en la Amazonía. No necesita nada que el río no le dé. Solo necesita que el río siga limpio.',
-        glb: 'tortuga.glb', videoUrl: 'https://andresdelgadov-star.github.io/SUBSUELO-1/TORTUGA.mp4', bg: '#001a0a'
+        glb: 'tortuga.glb',
+        ejemplares: 'Colonias reproductoras en colapso en el Putumayo.', videoUrl: 'https://andresdelgadov-star.github.io/SUBSUELO-1/TORTUGA.mp4', bg: '#001a0a'
       },
       {
         nom: 'Caimán del Amazonas', ci: 'Melanosuchus niger',
         est: 'Vulnerable',
         desc: 'Habita los ríos y lagunas de la cuenca amazónica. Es el predador que mantiene el equilibrio del agua. Sin él, las poblaciones de peces se descontrolan y el ecosistema colapsa. Su presencia es señal de que el río está sano.',
-        glb: 'caiman.glb', videoUrl: 'https://andresdelgadov-star.github.io/SUBSUELO-1/CAIMAN.mp4', bg: '#001008'
+        glb: 'caiman.glb',
+        ejemplares: 'Población en recuperación pero altamente vulnerable.', videoUrl: 'https://andresdelgadov-star.github.io/SUBSUELO-1/CAIMAN.mp4', bg: '#001008'
       },
     ],
     slides: [
@@ -1157,6 +1206,55 @@ function animarHero(){
    LÓGICA DE ZONAS
 ════════════════════════════════════ */
 let actual = null, slideIdx = 0, totalSlides = 0, firmas = 1247;
+
+/* Nombres cortos para los botones */
+const ZONA_NOMBRES = {
+  magdalena: 'Chucurí',
+  catatumbo: 'Catatumbo',
+  putumayo:  'Mocoa',
+};
+const ZONA_NUMS = { magdalena:'01', catatumbo:'02', putumayo:'03' };
+const TODAS_ZONAS = ['magdalena','catatumbo','putumayo'];
+
+function buildNavZonas(actualId){
+  const nav = document.getElementById('visor-nav-zonas');
+  nav.innerHTML = '';
+  TODAS_ZONAS.forEach(id => {
+    const btn = document.createElement('button');
+    btn.className = 'visor-zona-btn' + (id === actualId ? ' active-zona' : '');
+    btn.setAttribute('aria-label', id === actualId ? `Zona actual: ${ZONA_NOMBRES[id]}` : `Ir a Zona ${ZONA_NUMS[id]}: ${ZONA_NOMBRES[id]}`);
+    btn.innerHTML = `<span class="visor-zona-num">Zona ${ZONA_NUMS[id]}</span>`;
+    btn.onclick = id === actualId ? null : () => cambiarZonaVisor(id);
+    btn.disabled = id === actualId;
+    nav.appendChild(btn);
+  });
+}
+
+function cambiarZonaVisor(id){
+  // Cambiar zona sin volver al mapa
+  actual = id;
+  const z = ZONAS[id];
+  document.getElementById('visor-label').textContent  = z.label;
+  buildNavZonas(id);
+  document.getElementById('visor-coords').textContent = z.coords;
+  document.querySelectorAll('.zona-card').forEach(c => c.classList.remove('active'));
+  document.getElementById('zc-'+id).classList.add('active');
+  document.querySelectorAll('.zona-trigger').forEach(g => g.classList.remove('active'));
+  document.getElementById('zt-'+id).classList.add('active');
+  cargarEscena(id);
+  buildNavZonas(id);
+  buildFauna(z.fauna);
+  buildSlider(z.slides);
+  document.getElementById('cta-title').textContent = z.ctaTitulo;
+  document.getElementById('cta-desc').textContent  = z.ctaDesc;
+  document.getElementById('firma-form').style.display = 'block';
+  document.getElementById('firma-ok').classList.remove('visible');
+  // Scroll suave al inicio del visor
+  setTimeout(()=>{
+    const el = document.getElementById('s-visor');
+    window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 58, behavior:'smooth' });
+  }, 60);
+}
 
 function abrirZona(id){
   actual = id;
@@ -1278,7 +1376,10 @@ function buildFauna(fauna){
       <div class="fauna-nombre">${f.nom}<div class="fauna-nombre-sci">${f.ci}</div></div>
       <p class="fauna-desc">${f.desc}</p>
       <button class="fauna-btn"
-        onclick="abrirModal('${f.nom.replace(/'/g,"\\'")}','${f.ci}','${f.est}','${f.desc.replace(/'/g,"\\'").replace(/"/g,'\\"')}','${f.glb}','${f.videoUrl||""}')"
+        data-nom="${f.nom}" data-ci="${f.ci}" data-est="${f.est}"
+        data-desc="${f.desc}" data-glb="${f.glb}"
+        data-video="${f.videoUrl||''}" data-ej="${f.ejemplares||''}"
+        onclick="const d=this.dataset;abrirModal(d.nom,d.ci,d.est,d.desc,d.glb,d.video,d.ej)"
         aria-label="Ver ${f.nom} en su hábitat natural">Ver en su hábitat natural →</button>
     `;
     grid.appendChild(card);
@@ -1359,7 +1460,7 @@ function slideNav(dir){
 /* ════════════════════════════════════
    MODAL
 ════════════════════════════════════ */
-function abrirModal(nom, ci, est, desc, glb, videoUrl){
+function abrirModal(nom, ci, est, desc, glb, videoUrl, ejemplares){
   document.getElementById('modal-nombre').textContent     = nom;
   document.getElementById('modal-cientifico').textContent = ci;
   document.getElementById('modal-estado').textContent     = est;
