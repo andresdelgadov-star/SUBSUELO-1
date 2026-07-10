@@ -27,9 +27,9 @@
   --ease-in-out: cubic-bezier(.76,0,.24,1);
   --t-fast: 200ms; --t-mid: 350ms; --t-slow: 500ms;
   /* Tipografía */
-  --fs-xs:   .5rem;
-  --fs-sm:   .72rem;
-  --fs-base: .88rem;
+  --fs-xs:   .56rem;
+  --fs-sm:   .76rem;
+  --fs-base: .92rem;
   --fs-md:   1rem;
   --fs-lg:   1.15rem;
 }
@@ -159,6 +159,26 @@ nav.scrolled { padding:.8rem 2.5rem; }
 .nav-logo { font-family:'Bebas Neue',sans-serif; font-size:1.5rem; letter-spacing:.2em; color:var(--b); }
 .nav-logo span { color:var(--o); }
 .nav-tag { font-size:var(--fs-xs); letter-spacing:.28em; text-transform:uppercase; color:var(--b3); }
+.story-progress {
+  position:fixed; top:58px; left:50%; transform:translateX(-50%);
+  z-index:499; display:flex; align-items:center; gap:.45rem;
+  padding:.35rem .55rem; background:rgba(7,7,7,.72);
+  border:1px solid rgba(255,255,255,.06); backdrop-filter:blur(14px);
+  opacity:0; pointer-events:none; transition:opacity var(--t-mid), top var(--t-slow);
+}
+nav.scrolled + .story-progress { top:48px; }
+.story-step {
+  display:flex; align-items:center; gap:.35rem;
+  font-size:.52rem; letter-spacing:.16em; text-transform:uppercase;
+  color:var(--b3); white-space:nowrap; transition:color var(--t-fast);
+}
+.story-step::before {
+  content:''; width:5px; height:5px; border-radius:50%; background:var(--n5);
+  transition:background var(--t-fast), box-shadow var(--t-fast);
+}
+.story-step.active { color:var(--o); }
+.story-step.active::before { background:var(--o); box-shadow:0 0 8px rgba(232,93,4,.7); }
+#main:not([aria-hidden="true"]) .story-progress { opacity:1; }
 
 /* ═══════════════════════════════════════════
    HERO
@@ -246,7 +266,7 @@ nav.scrolled { padding:.8rem 2.5rem; }
 ═══════════════════════════════════════════ */
 .section-header { text-align:center; margin-bottom:4rem; }
 .section-eye {
-  font-size:var(--fs-xs); letter-spacing:.42em; text-transform:uppercase;
+  font-size:var(--fs-xs); letter-spacing:.32em; text-transform:uppercase;
   color:var(--o); margin-bottom:.85rem; display:block;
 }
 .section-title {
@@ -377,6 +397,9 @@ nav.scrolled { padding:.8rem 2.5rem; }
 .visor-divider { width:1px; height:20px; background:var(--n5); flex-shrink:0; }
 .visor-meta { flex:1; min-width:0; }
 .visor-zona-label { font-size:var(--fs-sm); letter-spacing:.15em; text-transform:uppercase; color:var(--o); display:block; font-weight:500; }
+.visor-zona-label.is-refreshing,
+.escena-impact-panel.is-zone-refreshing { animation:contextPulse .55s var(--ease-out) both; }
+@keyframes contextPulse { 0%{opacity:.45;transform:translateY(6px);} 100%{opacity:1;transform:none;} }
 .visor-coords { font-size:var(--fs-xs); letter-spacing:.1em; color:var(--b3); margin-top:.2rem; display:block; font-family:monospace; }
 .visor-badge360 {
   display:flex; align-items:center; gap:.4rem;
@@ -390,7 +413,8 @@ nav.scrolled { padding:.8rem 2.5rem; }
 @keyframes compassWobble { 0%,100%{transform:rotate(0deg);} 25%{transform:rotate(8deg);} 75%{transform:rotate(-8deg);} }
 
 .escena-wrap { position:relative; width:100%; height:80vh; min-height:560px; background:#020202; overflow:hidden; }
-.escena-inner { width:100%; height:100%; }
+.escena-inner { position:relative; width:100%; height:100%; background:#020202; }
+.escena-inner iframe { position:absolute; inset:0; width:100%; height:100%; border:none; display:block; }
 .escena-loader {
   position:absolute; inset:0; z-index:20; background:var(--n2);
   display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1.5rem;
@@ -405,7 +429,7 @@ nav.scrolled { padding:.8rem 2.5rem; }
 @keyframes loadBar { to { width:100%; } }
 .escena-chip {
   position:absolute; top:1.5rem; left:50%; transform:translateX(-50%);
-  font-size:var(--fs-xs); letter-spacing:.32em; text-transform:uppercase;
+  font-size:var(--fs-xs); letter-spacing:.24em; text-transform:uppercase;
   padding:.3rem 1rem; border:1px solid rgba(232,93,4,.3);
   color:var(--o); background:rgba(7,7,7,.8);
   backdrop-filter:blur(8px); pointer-events:none; z-index:10; white-space:nowrap;
@@ -416,6 +440,78 @@ nav.scrolled { padding:.8rem 2.5rem; }
   color:rgba(160,144,128,.35); pointer-events:none; z-index:10;
   white-space:nowrap; display:none;
 }
+.escena-impact-panel {
+  position:absolute; top:4.75rem; right:1.5rem; z-index:13;
+  width:min(340px,calc(100% - 3rem));
+  padding:0;
+  border:1px solid rgba(232,93,4,.24);
+  background:linear-gradient(145deg, rgba(7,7,7,.86), rgba(17,14,11,.72));
+  backdrop-filter:blur(14px);
+  box-shadow:0 18px 44px rgba(0,0,0,.38);
+  pointer-events:auto;
+  transition:opacity .35s ease, transform .35s ease, border-color .35s ease;
+}
+.escena-impact-panel.is-after {
+  border-color:rgba(232,93,4,.46);
+  background:linear-gradient(145deg, rgba(7,7,7,.9), rgba(38,19,8,.76));
+}
+.impact-head {
+  width:100%; border:none; background:transparent; color:inherit; cursor:pointer;
+  display:flex; align-items:center; justify-content:space-between; gap:1rem;
+  padding:1rem 1.05rem;
+  font-family:Inter,sans-serif; text-align:left;
+}
+.impact-head:focus-visible { outline:2px solid var(--o); outline-offset:3px; }
+.impact-kicker {
+  font-size:.62rem; letter-spacing:.24em; text-transform:uppercase;
+  color:var(--b3); line-height:1.4;
+}
+.impact-head-main { min-width:0; }
+.impact-actions { display:flex; align-items:center; gap:.55rem; flex-shrink:0; }
+.impact-state {
+  flex-shrink:0; padding:.26rem .55rem;
+  font-size:.56rem; letter-spacing:.2em; text-transform:uppercase; font-weight:800;
+  color:#000; background:var(--o);
+}
+.impact-toggle {
+  width:24px; height:24px; border:1px solid rgba(232,93,4,.34);
+  display:flex; align-items:center; justify-content:center;
+  color:var(--o); transition:transform .25s ease, background .25s ease;
+}
+.impact-toggle svg { width:12px; height:12px; stroke:currentColor; stroke-width:1.8; fill:none; }
+.escena-impact-panel:not(.is-collapsed) .impact-toggle {
+  transform:rotate(180deg); background:rgba(232,93,4,.1);
+}
+.impact-title {
+  font-family:'Bebas Neue',sans-serif; font-size:1.38rem;
+  letter-spacing:.08em; line-height:1; color:var(--b);
+}
+.impact-list {
+  display:grid; gap:.65rem; padding:0 1.05rem 1.05rem;
+  max-height:360px; opacity:1; overflow:hidden;
+  transition:max-height .35s ease, opacity .25s ease, padding .35s ease;
+}
+.escena-impact-panel.is-collapsed .impact-list {
+  max-height:0; opacity:0; padding-top:0; padding-bottom:0;
+}
+.impact-item {
+  display:grid; grid-template-columns:32px 1fr; align-items:start; gap:.7rem;
+  padding-top:.65rem; border-top:1px solid rgba(255,255,255,.07);
+}
+.impact-icon {
+  width:32px; height:32px; border:1px solid rgba(232,93,4,.32);
+  display:flex; align-items:center; justify-content:center;
+  color:var(--o); font-size:.72rem; font-weight:800;
+}
+.impact-label {
+  font-size:.64rem; letter-spacing:.16em; text-transform:uppercase;
+  color:var(--o); font-weight:800; line-height:1.35;
+}
+.impact-copy {
+  margin-top:.22rem; font-size:.72rem; color:var(--b2);
+  line-height:1.62;
+}
+.escena-impact-panel.is-updating { opacity:0; transform:translateY(8px); }
 .escena-map-nav {
   position:absolute; left:50%; bottom:4.25rem; transform:translateX(-50%);
   z-index:12; display:flex; align-items:center; justify-content:center; gap:.75rem;
@@ -426,7 +522,7 @@ nav.scrolled { padding:.8rem 2.5rem; }
   width:100%; min-width:0;
   padding:.72rem .9rem; border:1px solid rgba(232,93,4,.42);
   background:rgba(7,7,7,.82); color:var(--b);
-  backdrop-filter:blur(12px); font-size:var(--fs-xs); letter-spacing:.16em;
+  backdrop-filter:blur(12px); font-size:var(--fs-xs); letter-spacing:.13em;
   text-transform:uppercase; font-weight:700;
   transition:background var(--t-fast), border-color var(--t-fast), transform var(--t-fast), color var(--t-fast);
 }
@@ -435,6 +531,62 @@ nav.scrolled { padding:.8rem 2.5rem; }
 }
 .escena-map-btn:focus-visible { outline:2px solid var(--o); outline-offset:3px; }
 .escena-map-btn-arrow { flex-shrink:0; font-size:.9rem; }
+.escena-transition {
+  position:absolute; inset:0; z-index:24; pointer-events:none;
+  opacity:0; visibility:hidden; overflow:hidden;
+  background:radial-gradient(circle at 50% 50%, rgba(232,93,4,.18), rgba(2,2,2,.72) 58%, rgba(2,2,2,.94));
+  transition:opacity .35s ease, visibility .35s ease;
+}
+.escena-transition.is-active { opacity:1; visibility:visible; }
+.escena-transition::before,
+.escena-transition::after {
+  content:''; position:absolute; inset:-16%;
+  background:
+    linear-gradient(105deg, transparent 0 34%, rgba(232,93,4,.08) 39%, rgba(255,236,214,.26) 45%, rgba(232,93,4,.08) 51%, transparent 58%),
+    repeating-linear-gradient(0deg, rgba(255,255,255,.035) 0 1px, transparent 1px 12px);
+  transform:translateX(-115%) skewX(-9deg);
+  mix-blend-mode:screen;
+}
+.escena-transition::after {
+  background:linear-gradient(90deg, transparent, rgba(232,93,4,.72), rgba(255,255,255,.72), rgba(232,93,4,.42), transparent);
+  filter:blur(10px);
+}
+.escena-transition.is-active::before { animation:territorioSweep 1.35s cubic-bezier(.16,1,.3,1) forwards; }
+.escena-transition.is-active::after { animation:territorioFlash 1.35s cubic-bezier(.16,1,.3,1) forwards; }
+.escena-transition.is-revealing { animation:transitionFade .75s .9s ease forwards; }
+.escena-transition-vignette {
+  position:absolute; inset:0;
+  background:
+    linear-gradient(to bottom, rgba(0,0,0,.88), transparent 22%, transparent 70%, rgba(0,0,0,.9)),
+    radial-gradient(circle at 50% 50%, transparent 0 42%, rgba(0,0,0,.8));
+}
+.escena-transition-copy {
+  position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+  gap:min(7vw,5rem); padding:2rem;
+  font-family:'Bebas Neue',sans-serif; letter-spacing:.16em; text-transform:uppercase;
+  color:var(--b); text-align:center;
+}
+.escena-transition-label {
+  font-size:clamp(1.9rem,6vw,5rem); line-height:1; opacity:.34;
+  transform:translateY(10px);
+}
+.escena-transition-title {
+  font-family:'Inter',sans-serif; font-size:var(--fs-xs); font-weight:800;
+  letter-spacing:.34em; color:var(--o); line-height:1.8;
+  border-top:1px solid rgba(232,93,4,.42); border-bottom:1px solid rgba(232,93,4,.42);
+  padding:.75rem 1rem; max-width:26ch;
+}
+.escena-transition.is-active.to-after .escena-transition-label:first-child,
+.escena-transition.is-active.to-before .escena-transition-label:last-child { animation:labelDim 1.25s ease forwards; }
+.escena-transition.is-active.to-after .escena-transition-label:last-child,
+.escena-transition.is-active.to-before .escena-transition-label:first-child { animation:labelFocus 1.25s .25s ease forwards; }
+.escena-transition.is-active .escena-transition-title { animation:titlePulse 1.1s .1s ease forwards; }
+@keyframes territorioSweep { 0%{transform:translateX(-115%) skewX(-9deg);} 100%{transform:translateX(115%) skewX(-9deg);} }
+@keyframes territorioFlash { 0%,100%{transform:translateX(-120%) skewX(-9deg);opacity:0;} 38%,62%{opacity:1;} 100%{transform:translateX(120%) skewX(-9deg);opacity:0;} }
+@keyframes transitionFade { to{opacity:0;visibility:hidden;} }
+@keyframes labelDim { 0%{opacity:.22;transform:translateX(0) scale(1);} 55%{opacity:.5;} 100%{opacity:.08;transform:translateX(-18px) scale(.96);} }
+@keyframes labelFocus { 0%{opacity:.08;transform:translateX(18px) scale(.96);} 70%,100%{opacity:.8;transform:translateX(0) scale(1.02);} }
+@keyframes titlePulse { 0%{opacity:0;transform:scale(.96);} 30%,80%{opacity:1;transform:scale(1);} 100%{opacity:.72;transform:scale(.99);} }
 
 /* ═══════════════════════════════════════════
    FAUNA
@@ -495,6 +647,12 @@ nav.scrolled { padding:.8rem 2.5rem; }
 }
 .fauna-card:hover .fauna-estado { background:rgba(232,93,4,.08); }
 
+.fauna-tag {
+  font-size:.62rem; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--b); background:rgba(232,93,4,.1);
+  border:1px solid rgba(232,93,4,.24);
+  padding:.34rem .7rem; line-height:1.35;
+}
 .fauna-nombre { font-size:var(--fs-md); font-weight:600; color:var(--b); line-height:1.25; }
 .fauna-nombre-sci { font-size:var(--fs-sm); color:var(--b3); font-style:italic; margin-top:.15rem; }
 .fauna-desc {
@@ -597,7 +755,15 @@ nav.scrolled { padding:.8rem 2.5rem; }
 #s-cta.visible { display:block; animation:sectionIn .5s .2s var(--ease-out) both; }
 .cta-wrap { max-width:600px; margin:0 auto; text-align:center; }
 .cta-titulo { font-size:var(--fs-lg); font-weight:500; color:var(--b); line-height:1.45; margin-bottom:.75rem; text-wrap:balance; text-align:center; }
-.cta-desc { font-size:var(--fs-base); color:var(--b2); line-height:1.75; margin-bottom:2.5rem; max-width:48ch; margin-left:auto; margin-right:auto; text-align:center; }
+.cta-desc { font-size:var(--fs-base); color:var(--b2); line-height:1.75; margin-bottom:1.5rem; max-width:48ch; margin-left:auto; margin-right:auto; text-align:center; }
+.cta-manifiesto {
+  margin:0 auto 2.5rem; max-width:42ch;
+  font-family:'Bebas Neue',sans-serif; font-size:clamp(1.6rem,4vw,2.45rem);
+  letter-spacing:.08em; line-height:1.05; color:var(--o);
+  text-wrap:balance;
+}
+.cta-manifiesto::before,
+.cta-manifiesto::after { content:''; display:block; width:42px; height:1px; background:rgba(232,93,4,.55); margin:1rem auto; }
 .firma-box { background:var(--n2); border:1px solid var(--n3); padding:2.5rem; text-align:left; }
 .firma-top { display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:1rem; flex-wrap:wrap; gap:.75rem; }
 .firma-count { font-family:'Bebas Neue',sans-serif; font-size:3.5rem; letter-spacing:.02em; color:var(--o); line-height:1; }
@@ -657,14 +823,16 @@ nav.scrolled { padding:.8rem 2.5rem; }
 @keyframes modalIn { from{opacity:0;transform:scale(.96) translateY(12px);} }
 .modal-close {
   position:absolute; top:1rem; right:1rem;
-  background:none; border:1px solid transparent; color:var(--b3);
-  font-size:1rem; width:32px; height:32px;
+  background:rgba(7,7,7,.72); border:1px solid rgba(232,93,4,.28); color:var(--b);
+  font-size:1.05rem; width:38px; height:38px;
   display:flex; align-items:center; justify-content:center;
+  z-index:2;
   transition:color var(--t-fast),border-color var(--t-fast),background var(--t-fast),transform var(--t-fast);
 }
-.modal-close:hover { color:var(--o); border-color:var(--n5); background:var(--n3); transform:rotate(90deg); }
+.modal-close:hover { color:#000; border-color:var(--o); background:var(--o); transform:rotate(90deg); }
 .modal-close:focus-visible { outline:2px solid var(--o); outline-offset:3px; }
-.modal-media { width:100%; height:260px; background:var(--n3); margin-bottom:1.5rem; position:relative; overflow:hidden; }
+.modal-media { width:100%; height:260px; background:var(--n3); margin-bottom:1.5rem; position:relative; overflow:hidden; animation:mediaIn .55s .08s var(--ease-out) both; }
+@keyframes mediaIn { from{opacity:0;transform:translateY(10px);} to{opacity:1;transform:none;} }
 .modal-media.video-mode { height:auto; aspect-ratio:16/9; }
 #modal-video { width:100%; height:100%; object-fit:cover; object-position:center; background:#000; }
 .modal-model-ph {
@@ -700,8 +868,26 @@ footer { padding:2.5rem 2rem; text-align:center; border-top:1px solid var(--n3);
   .hero-stats { max-width:100%; }
   .visor-topbar { padding:1rem 1.25rem; gap:.65rem; }
   .escena-wrap { min-height:520px; }
+  .escena-impact-panel {
+    top:4.45rem; right:1rem; left:1rem; width:auto;
+  }
+  .impact-head { padding:.85rem .9rem; }
+  .impact-list { padding:0 .9rem .9rem; }
+  .impact-title { font-size:1.16rem; }
+  .impact-item { grid-template-columns:26px 1fr; gap:.55rem; padding-top:.55rem; }
+  .impact-icon { width:26px; height:26px; font-size:.62rem; }
+  .impact-copy { line-height:1.55; }
   .escena-map-nav { bottom:3.75rem; flex-direction:column; width:calc(100% - 2rem); gap:.55rem; }
   .escena-map-btn { width:100%; max-width:none; flex:none; }
+  .escena-transition-copy { flex-direction:column; gap:1rem; }
+  .escena-transition-title { max-width:22ch; }
+}
+@media(prefers-reduced-motion:reduce){
+  .escena-transition,
+  .escena-transition::before,
+  .escena-transition::after,
+  .escena-transition-label,
+  .escena-transition-title { animation:none !important; transition:none !important; }
 }
 </style>
 </head>
@@ -931,17 +1117,42 @@ footer { padding:2.5rem 2rem; text-align:center; border-top:1px solid var(--n3);
         Panorama 360° — explora el territorio y sus efectos
       </div>
       <div class="escena-hint" id="escena-hint">Arrastra para explorar el entorno →</div>
+      <aside class="escena-impact-panel is-collapsed" id="escena-impact-panel" aria-live="polite">
+        <button class="impact-head" id="impact-toggle-btn" type="button" onclick="toggleImpactPanel()" aria-expanded="false" aria-controls="impact-list">
+          <div class="impact-head-main">
+            <div class="impact-kicker" id="impact-kicker">Lectura del territorio</div>
+            <div class="impact-title" id="impact-title">Antes</div>
+          </div>
+          <div class="impact-actions">
+            <div class="impact-state" id="impact-state">Antes</div>
+            <div class="impact-toggle" aria-hidden="true">
+              <svg viewBox="0 0 16 16">
+                <path d="M4 6L8 10L12 6" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+          </div>
+        </button>
+        <div class="impact-list" id="impact-list"></div>
+      </aside>
+      <div class="escena-transition" id="escena-transition" aria-hidden="true">
+        <div class="escena-transition-vignette"></div>
+        <div class="escena-transition-copy">
+          <span class="escena-transition-label">Antes</span>
+          <span class="escena-transition-title">El territorio cambia</span>
+          <span class="escena-transition-label">Después</span>
+        </div>
+      </div>
       <div class="escena-map-nav" id="escena-map-nav" aria-label="Cambiar a otro panorama 360"></div>
       <div class="escena-inner" id="escena-inner"></div>
     </div>
     <!-- Botón ver efectos -->
     <div style="display:flex;justify-content:center;padding:1.5rem;background:var(--n2);border-bottom:1px solid var(--n3);">
-      <button onclick="document.getElementById('s-datos').scrollIntoView({behavior:'smooth'})"
-              style="display:flex;align-items:center;gap:.6rem;padding:.7rem 1.75rem;background:var(--o);color:#000;border:none;font-family:Inter,sans-serif;font-size:.58rem;font-weight:700;letter-spacing:.25em;text-transform:uppercase;cursor:pointer;transition:background .2s,transform .15s;"
+      <button onclick="scrollFaunaAmenazada()"
+              style="display:flex;align-items:center;gap:.6rem;padding:.7rem 1.75rem;background:var(--o);color:#000;border:none;font-family:Inter,sans-serif;font-size:.64rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;cursor:pointer;transition:background .2s,transform .15s;"
               onmouseover="this.style.background='#FF6B1A';this.style.transform='translateY(-1px)'"
               onmouseout="this.style.background='#E85D04';this.style.transform='none'"
-              aria-label="Ver efectos del fracking en esta zona">
-        Ver efectos fracking
+              aria-label="Ver fauna amenazada de esta zona">
+        Ver fauna amenazada
         <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
           <path d="M3 5.5L7 9.5L11 5.5" stroke="#000" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
@@ -986,6 +1197,7 @@ footer { padding:2.5rem 2rem; text-align:center; border-top:1px solid var(--n3);
       <span class="section-eye">Tu posición importa</span>
       <h2 class="cta-titulo" id="cta-title" aria-live="polite">—</h2>
       <p class="cta-desc" id="cta-desc" aria-live="polite">—</p>
+      <div class="cta-manifiesto">Lo que está bajo tierra no vale más que lo que vive encima.</div>
       <div class="firma-box">
         <div class="firma-top">
           <div>
@@ -1080,7 +1292,7 @@ footer { padding:2.5rem 2rem; text-align:center; border-top:1px solid var(--n3);
       <!-- Dato de ejemplares estilo card -->
       <div style="background:rgba(232,93,4,.08);border:1px solid rgba(232,93,4,.25);padding:.85rem 1rem;display:flex;align-items:center;gap:1rem;">
         <div>
-          <div style="font-size:.48rem;letter-spacing:.28em;text-transform:uppercase;color:var(--o);margin-bottom:.2rem;">Ejemplares en Colombia</div>
+          <div style="font-size:.58rem;letter-spacing:.22em;text-transform:uppercase;color:var(--o);margin-bottom:.2rem;">Ejemplares en Colombia</div>
           <div style="font-size:.88rem;font-weight:500;color:var(--b);line-height:1.5;" id="modal-ej-val">—</div>
         </div>
       </div>
@@ -1255,6 +1467,7 @@ function animarHero(){
    LÓGICA DE ZONAS
 ════════════════════════════════════ */
 let actual = null, modoEscena = 'hoy', slideIdx = 0, totalSlides = 0, firmas = 1247;
+let impactAutoShown = false, impactUserTouched = false;
 
 /* Nombres cortos para los botones */
 const ZONA_NOMBRES = {
@@ -1264,6 +1477,76 @@ const ZONA_NOMBRES = {
 };
 const ZONA_NUMS = { magdalena:'01', catatumbo:'02', putumayo:'03' };
 const TODAS_ZONAS = ['magdalena','catatumbo','putumayo'];
+const FAUNA_TAGS = {
+  'Manatí Antillano': 'Depende del agua limpia',
+  'Jaguar Americano': 'Necesita bosque continuo',
+  'Danta o Tapir Amazónico': 'Regenera la selva',
+  'Mono Araña del Norte': 'Vive en el dosel intacto',
+  'Tortuga Amazónica': 'Regresa al río sano',
+  'Caimán del Amazonas': 'Indicador de equilibrio'
+};
+const IMPACTO_360 = {
+  magdalena: {
+    hoy: {
+      titulo:'Antes · Ciénaga viva',
+      estado:'Antes',
+      items:[
+        { icon:'01', label:'Agua quieta', copy:'Ciénagas y caños conectan el Magdalena Medio y sostienen refugios de agua limpia.' },
+        { icon:'02', label:'Corredor biológico', copy:'Jaguar y manatí dependen de pasos continuos entre bosque, orilla y humedal.' },
+        { icon:'03', label:'Cobertura remanente', copy:'El 15% de bosque original que queda concentra hábitats críticos para resistir.' },
+      ]
+    },
+    fracking: {
+      titulo:'Después · Humedal bajo presión',
+      estado:'Después',
+      items:[
+        { icon:'01', label:'Agua extraída', copy:'Cada pozo puede demandar millones de litros de agua de la misma cuenca.' },
+        { icon:'02', label:'Fragmentación', copy:'Vías, plataformas y ruido cortan rutas de fauna y aíslan los refugios.' },
+        { icon:'03', label:'Riesgo químico', copy:'El retorno del agua usada puede arrastrar compuestos que el humedal no puede absorber.' },
+      ]
+    }
+  },
+  catatumbo: {
+    hoy: {
+      titulo:'Antes · Bosque Barí',
+      estado:'Antes',
+      items:[
+        { icon:'01', label:'Bosque alto', copy:'El Catatumbo Barí protege árboles de hasta 60 metros y humedad constante.' },
+        { icon:'02', label:'Territorio vivo', copy:'25 comunidades Barí mantienen una relación ancestral con río, selva y fauna.' },
+        { icon:'03', label:'Semillas en ruta', copy:'La danta y el mono araña dispersan frutos que regeneran el bosque.' },
+      ]
+    },
+    fracking: {
+      titulo:'Después · Selva fragmentada',
+      estado:'Después',
+      items:[
+        { icon:'01', label:'Licencias acumuladas', copy:'La presión extractiva abre precedentes sobre un territorio que exige consulta previa.' },
+        { icon:'02', label:'Dosel interrumpido', copy:'Cuando se corta la continuidad del bosque, el mono araña pierde sus rutas altas.' },
+        { icon:'03', label:'Río vulnerable', copy:'Sedimentos, tránsito y residuos aumentan la presión sobre una cuenca ya disputada.' },
+      ]
+    }
+  },
+  putumayo: {
+    hoy: {
+      titulo:'Antes · Amazonía conectada',
+      estado:'Antes',
+      items:[
+        { icon:'01', label:'Cuenca inmensa', copy:'El sistema Caguán-Putumayo conecta más de 11 millones de hectáreas amazónicas.' },
+        { icon:'02', label:'Río reproductivo', copy:'Playas y orillas sostienen ciclos de tortuga amazónica, peces y caimanes.' },
+        { icon:'03', label:'Biodiversidad crítica', copy:'La Amazonía colombiana concentra una porción excepcional de vida del planeta.' },
+      ]
+    },
+    fracking: {
+      titulo:'Después · Daño irreversible',
+      estado:'Después',
+      items:[
+        { icon:'01', label:'Bosque primario', copy:'Una vez intervenido, el bosque amazónico primario no vuelve a su estado original.' },
+        { icon:'02', label:'Agua transfronteriza', copy:'La contaminación de la cuenca viaja más allá de Colombia hacia el sistema amazónico.' },
+        { icon:'03', label:'Metales pesados', copy:'La experiencia petrolera cercana en la región muestra riesgos tóxicos para comunidades.' },
+      ]
+    }
+  }
+};
 
 function buildNavZonas(actualId){
   const nav = document.getElementById('visor-nav-zonas');
@@ -1287,19 +1570,95 @@ function buildEscenaMapNav(actualId){
   btn.type = 'button';
   const viendoFracking = modoEscena === 'fracking';
   btn.setAttribute('aria-label', viendoFracking ? `Volver al panorama actual de ${ZONA_NOMBRES[actualId]}` : `Ver efectos del fracking en ${ZONA_NOMBRES[actualId]}`);
-  btn.textContent = viendoFracking ? 'Volver' : 'Ver efectos fracking';
+  btn.textContent = viendoFracking ? 'Volver al antes' : 'Comparar antes / después';
   btn.onclick = () => cambiarModoEscena(viendoFracking ? 'hoy' : 'fracking');
   nav.appendChild(btn);
 }
 
 function cambiarModoEscena(modo){
   if(!actual) return;
+  const modoAnterior = modoEscena;
   modoEscena = modo;
-  cargarEscena(actual);
+  renderImpactPanel(actual);
+  cargarEscena(actual, modoAnterior !== modo);
   buildEscenaMapNav(actual);
   document.getElementById('escena-chip').textContent = modoEscena === 'fracking'
     ? 'Panorama 360° — efectos del fracking'
     : 'Panorama 360° — territorio actual';
+}
+
+function renderImpactPanel(id){
+  const panel = document.getElementById('escena-impact-panel');
+  const data = IMPACTO_360[id]?.[modoEscena];
+  if(!panel || !data) return;
+  panel.classList.add('is-updating');
+  setTimeout(()=>{
+    panel.classList.toggle('is-after', modoEscena === 'fracking');
+    document.getElementById('impact-kicker').textContent = ZONA_NOMBRES[id] + ' · lectura del territorio';
+    document.getElementById('impact-title').textContent = data.titulo;
+    document.getElementById('impact-state').textContent = data.estado;
+    document.getElementById('impact-list').innerHTML = data.items.map(item => `
+      <div class="impact-item">
+        <div class="impact-icon" aria-hidden="true">${item.icon}</div>
+        <div>
+          <div class="impact-label">${item.label}</div>
+          <div class="impact-copy">${item.copy}</div>
+        </div>
+      </div>
+    `).join('');
+    panel.classList.remove('is-updating');
+  }, 120);
+}
+
+function pulseVisorContext(){
+  const label = document.getElementById('visor-label');
+  const panel = document.getElementById('escena-impact-panel');
+  [label, panel].forEach(el => {
+    if(!el) return;
+    el.classList.remove('is-refreshing','is-zone-refreshing');
+    el.offsetHeight;
+    el.classList.add(el === panel ? 'is-zone-refreshing' : 'is-refreshing');
+  });
+  setTimeout(()=>{
+    label?.classList.remove('is-refreshing');
+    panel?.classList.remove('is-zone-refreshing');
+  }, 650);
+}
+
+function revealImpactPanelOnce(){
+  if(impactAutoShown || impactUserTouched) return;
+  impactAutoShown = true;
+  const panel = document.getElementById('escena-impact-panel');
+  const btn = document.getElementById('impact-toggle-btn');
+  if(!panel || !btn) return;
+  panel.classList.remove('is-collapsed');
+  btn.setAttribute('aria-expanded', 'true');
+  setTimeout(()=>{
+    if(impactUserTouched) return;
+    panel.classList.add('is-collapsed');
+    btn.setAttribute('aria-expanded', 'false');
+  }, 3200);
+}
+
+function toggleImpactPanel(){
+  const panel = document.getElementById('escena-impact-panel');
+  const btn = document.getElementById('impact-toggle-btn');
+  if(!panel || !btn) return;
+  impactUserTouched = true;
+  const collapsed = panel.classList.toggle('is-collapsed');
+  btn.setAttribute('aria-expanded', String(!collapsed));
+}
+
+function scrollFaunaAmenazada(){
+  const fauna = document.getElementById('s-fauna');
+  if(!fauna.classList.contains('visible') && actual){
+    buildFauna(ZONAS[actual].fauna);
+    fauna.classList.add('visible');
+  }
+  window.scrollTo({
+    top: fauna.getBoundingClientRect().top + window.scrollY - 58,
+    behavior: 'smooth'
+  });
 }
 
 function cambiarZonaVisor(id){
@@ -1315,6 +1674,8 @@ function cambiarZonaVisor(id){
   document.getElementById('zc-'+id).classList.add('active');
   document.querySelectorAll('.zona-trigger').forEach(g => g.classList.remove('active'));
   document.getElementById('zt-'+id).classList.add('active');
+  renderImpactPanel(id);
+  pulseVisorContext();
   cargarEscena(id);
   buildFauna(z.fauna);
   buildSlider(z.slides);
@@ -1346,8 +1707,11 @@ function abrirZona(id){
   document.getElementById('escena-chip').textContent  = 'Panorama 360° — territorio actual';
   buildNavZonas(id);
   buildEscenaMapNav(id);
+  renderImpactPanel(id);
+  pulseVisorContext();
   cargarEscena(id);
   document.getElementById('s-visor').classList.add('visible');
+  setTimeout(revealImpactPanelOnce, 1300);
 
   // Fauna
   buildFauna(z.fauna);
@@ -1387,6 +1751,7 @@ function cerrar(){
   document.querySelectorAll('.zona-card, .zona-trigger').forEach(el => el.classList.remove('active'));
   document.getElementById('escena-inner').innerHTML = '';
   document.getElementById('escena-map-nav').innerHTML = '';
+  document.getElementById('impact-list').innerHTML = '';
   actual = null;
   modoEscena = 'hoy';
   document.getElementById('s-mapa').scrollIntoView({ behavior:'smooth' });
@@ -1395,14 +1760,24 @@ function cerrar(){
 /* ════════════════════════════════════
    VISOR 360 — Kuula con loader
 ════════════════════════════════════ */
-function cargarEscena(id){
+function cargarEscena(id, cinematic = false){
   const inner  = document.getElementById('escena-inner');
   const loader = document.getElementById('escena-loader');
   const hint   = document.getElementById('escena-hint');
-  inner.innerHTML = '';
+  const transition = document.getElementById('escena-transition');
+  const oldFrame = inner.querySelector('iframe');
+  if(!cinematic) inner.innerHTML = '';
   hint.style.display = 'none';
 
-  loader.classList.remove('hidden');
+  if(cinematic && transition){
+    loader.classList.add('hidden');
+    transition.classList.remove('is-active','is-revealing','to-before','to-after');
+    transition.classList.add(modoEscena === 'fracking' ? 'to-after' : 'to-before');
+    transition.offsetHeight;
+    transition.classList.add('is-active');
+  } else {
+    loader.classList.remove('hidden');
+  }
   const fill = loader.querySelector('.loader-bar-fill');
   fill.style.animation = 'none';
   fill.offsetHeight;
@@ -1415,13 +1790,24 @@ function cargarEscena(id){
   iframe.setAttribute('allowfullscreen','');
   iframe.setAttribute('scrolling','no');
   iframe.setAttribute('title', `${modoEscena === 'fracking' ? 'Efectos del fracking' : 'Panorama actual'} — ${ZONAS[id].label}`);
-  iframe.style.cssText = 'width:100%;height:100%;border:none;display:block;opacity:0;transition:opacity .5s ease;';
+  iframe.style.cssText = cinematic
+    ? 'opacity:0;clip-path:inset(0 100% 0 0);transition:opacity .85s ease,clip-path 1.15s cubic-bezier(.16,1,.3,1);'
+    : 'opacity:0;transition:opacity .5s ease;';
 
   iframe.onload = ()=>{
+    const revealDelay = cinematic ? 580 : 800;
     setTimeout(()=>{
-      loader.classList.add('hidden');
+      if(!cinematic) loader.classList.add('hidden');
+      if(cinematic && transition) transition.classList.add('is-revealing');
       iframe.style.opacity = '1';
-    }, 800);
+      iframe.style.clipPath = 'inset(0 0 0 0)';
+      if(cinematic){
+        setTimeout(()=>{
+          if(oldFrame && oldFrame.parentNode === inner) oldFrame.remove();
+          if(transition) transition.classList.remove('is-active','is-revealing','to-before','to-after');
+        }, 1650);
+      }
+    }, revealDelay);
   };
 
   inner.appendChild(iframe);
@@ -1460,6 +1846,7 @@ function buildFauna(fauna){
     card.innerHTML = `
       <div class="fauna-model-wrap">${modelHTML}</div>
       <div class="fauna-estado">${f.est}</div>
+      <div class="fauna-tag">${FAUNA_TAGS[f.nom] || 'Especie clave del territorio'}</div>
       <div class="fauna-nombre">${f.nom}<div class="fauna-nombre-sci">${f.ci}</div></div>
       <p class="fauna-desc">${f.desc}</p>
       <button class="fauna-btn"
